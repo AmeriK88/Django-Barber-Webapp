@@ -1,4 +1,4 @@
-// static/js/zoom.js
+// Aplica el zoom a las imágenes con la clase 'card-img-top'
 $(document).ready(function() {
-    $('.card-img-top').zoom(); // Aplica el zoom a las imágenes con la clase 'card-img-top'
+    $('.card-img-top').zoom(); 
 });
