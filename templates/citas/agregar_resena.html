@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Añadir Reseña - Cabigote Barber Shop{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Añadir Reseña</h1>
+    <div class="card mb-4">
+        <div class="card-header">Formulario de Reseña</div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    {{ form.servicio.label_tag }}
+                    {{ form.servicio }}
+                </div>
+                <div class="mb-3">
+                    {{ form.texto.label_tag }}
+                    {{ form.texto }}
+                </div>
+                <div class="mb-3">
+                    {{ form.puntuacion.label_tag }}
+                    <div class="d-flex flex-row">
+                        {% for radio in form.puntuacion %}
+                            <div class="form-check form-check-inline me-2">
+                                {{ radio.tag }}
+                                <label for="{{ radio.id_for_label }}" class="form-check-label">{{ radio.choice_label }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {{ form.puntuacion.errors }}
+                </div>
+                <button type="submit" class="btn btn-primary">Enviar</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

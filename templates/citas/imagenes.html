@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Productos - Cabigote Barber Shop{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow bg-light text-center text-secondary mb-5 mt-5">
+        <h1>Productos</h1>
+    </div>
+    <div class="row">
+        {% for imagen in imagenes %}
+        <div class="col-md-4 mb-5 card-img-top">
+            <div class="card">
+                <a href="{% url 'citas:detalle_producto' producto_id=imagen.id %}">
+                    <img src="{{ imagen.imagen.url }}" alt="{{ imagen.titulo }}" class="img-fluid">
+                </a>
+                <div class="card-body text-center">
+                    <p class="card-text">{{ imagen.titulo }}</p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>No hay imagenes disponibles.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

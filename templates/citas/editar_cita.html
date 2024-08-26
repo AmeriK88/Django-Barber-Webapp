@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="card shadow bg-light text-center text-secondary mb-3">
+    <h2>Editar Cita</h2>
+  </div>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-secondary">Guardar cambios</button>
+  </form>
+{% endblock %}
