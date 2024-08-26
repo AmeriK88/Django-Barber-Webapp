@@ -90,8 +90,15 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ['email', 'telefono']
+        widgets = {
+            'email': forms.EmailInput(attrs={'autocomplete': 'email'}),
+            'telefono': forms.TextInput(attrs={'autocomplete': 'tel'}),
+        }
 
 class UserForm(forms.ModelForm):
-    class Meta:
+     class Meta:
         model = User
-        fields = ['email'] 
+        fields = ['email']
+        widgets = {
+            'email': forms.EmailInput(attrs={'autocomplete': 'email', 'id': 'user-email'}),
+        }
