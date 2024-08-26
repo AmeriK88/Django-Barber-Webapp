@@ -1,6 +1,6 @@
 # Proyecto de Gestión de Citas
 
-Este es un proyecto de gestión de citas desarrollado con Django. La aplicación permite a los usuarios registrar, iniciar sesión, reservar citas, ver y gestionar sus citas, y agregar reseñas, edición de perfil y datso del perfil y muchas más características. También proporciona un panel de administración mejorado mediante el uso de la biblioteca Grappelli.
+Este es un proyecto de gestión de citas desarrollado con Django. La aplicación permite a los usuarios registrar, iniciar sesión, reservar citas, ver y gestionar sus citas (editar y eliminar), recepción de confirmación via email de cita generada, y agregar reseñas, edición de perfil y datos del perfil como contraseña, email y teléfono, sección de productos con vista detallada del producto seleccionado. Manejo de errores y excepciones así como vistas personalizada de plantillas de error. También proporciona un panel de administración mejorado mediante el uso de la biblioteca Grappelli. 
 
 # Estructura del Proyecto
 
