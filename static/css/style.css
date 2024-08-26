@@ -109,6 +109,7 @@ img {
     background: #f9f9f9;
 }
 
+/* Estilos tarjetas */
 .card {
     border: none;
     border-radius: 8px;
@@ -205,12 +206,35 @@ img {
     transform: scale(1.1);
 }
 
+/* Mensaje error formulario edicion */
 .is-invalid {
     border-color: #dc3545; /* Color rojo para indicar un error */
 }
 
 .invalid-feedback {
     color: #dc3545;
+}
+
+/* Spinner de carga */
+#loader {
+    display: none; /* Inicialmente oculto */
+    position: fixed;
+    z-index: 999;
+    left: 50%;
+    top: 50%;
+    width: 60px;
+    height: 60px;
+    margin-left: -30px; /* Para centrar el spinner */
+    margin-top: -30px; /* Para centrar el spinner */
+    border: 8px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 8px solid #3498db;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 /* Footer */
