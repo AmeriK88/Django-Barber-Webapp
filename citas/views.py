@@ -31,7 +31,7 @@ def register(request):
             user = authenticate(username=username, password=raw_password)
             if user:
                 auth_login(request, user)
-                return redirect('citas:home')
+                return redirect('citas:perfil_usuario')
     else:
         form = CustomUserCreationForm()
     return render(request, 'registration/register.html', {'form': form})

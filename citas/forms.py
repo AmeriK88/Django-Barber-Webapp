@@ -1,11 +1,13 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from .models import Cita, Resena
 from datetime import datetime, time
 from django.utils import timezone
 from .models import UserProfile
+from django_recaptcha.fields import ReCaptchaField
+
 
 class CitaForm(forms.ModelForm):
     HORA_CHOICES = [
@@ -59,6 +61,7 @@ class ResenaForm(forms.ModelForm):
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True, label='Correo electrónico')
     phone = forms.CharField(max_length=15, required=True, label='Teléfono')
+    captcha = ReCaptchaField() 
 
     class Meta:
         model = User
@@ -84,7 +87,10 @@ class CustomUserCreationForm(UserCreationForm):
         if commit:
             user.save()
         return user
-
+    
+class CustomAuthenticationForm(AuthenticationForm):
+    captcha = ReCaptchaField()
+    
     
 class UserProfileForm(forms.ModelForm):
     class Meta:
