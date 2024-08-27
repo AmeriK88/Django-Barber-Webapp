@@ -113,6 +113,7 @@ def eliminar_cita(request, cita_id):
         return redirect('citas:ver_citas')
 
     return render(request, 'citas/eliminar_cita.html', {'cita': cita})
+    
 
 @login_required
 @handle_exceptions

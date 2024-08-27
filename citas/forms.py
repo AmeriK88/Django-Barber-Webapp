@@ -19,7 +19,6 @@ class CitaForm(forms.ModelForm):
         ('17:00', '05:00 PM'),
         ('18:00', '06:00 PM'),
         ('19:00', '07:00 PM'),
-        ('20:00', '08:00 PM'),
     ]
 
     hora = forms.ChoiceField(choices=HORA_CHOICES, label='Hora')
@@ -44,7 +43,7 @@ class CitaForm(forms.ModelForm):
     def clean_hora(self):
         hora = self.cleaned_data['hora']
         hora = datetime.strptime(hora, '%H:%M').time()  
-        if hora < time(9, 30) or hora > time(20, 0):
+        if hora < time(9, 30) or hora > time(19, 0):
             raise ValidationError("La hora seleccionada está fuera del rango permitido.")
         return hora
 
