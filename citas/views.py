@@ -5,8 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from datetime import datetime
+from django.utils import timezone
 from django.urls import reverse
-
 from .models import Servicio, Resena, Imagen, Cita, UserProfile
 from .forms import CitaForm, ResenaForm, CustomUserCreationForm, UserProfileForm, UserForm
 from .utils import enviar_confirmacion_cita
@@ -57,6 +57,11 @@ def reservar_cita(request):
             fecha = form.cleaned_data['fecha']
             hora = form.cleaned_data['hora']
             fecha_hora = datetime.combine(fecha, hora)
+            
+            # Convertir a timezone-aware si USE_TZ está habilitado
+            if timezone.is_naive(fecha_hora):
+                fecha_hora = timezone.make_aware(fecha_hora)
+            
             if Cita.objects.filter(fecha=fecha_hora).exists():
                 form.add_error(None, "Ya existe una cita reservada en esa fecha y hora.")
             else:
@@ -67,7 +72,6 @@ def reservar_cita(request):
                 enviar_confirmacion_cita(request.user.email, cita)
                 messages.success(request, '¡Cita reservada con éxito!')
                 return redirect('citas:perfil_usuario')
-            
     else:
         form = CitaForm()
     return render(request, 'citas/reservar_cita.html', {'form': form})

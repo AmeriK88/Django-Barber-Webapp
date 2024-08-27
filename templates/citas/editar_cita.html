@@ -1,12 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div class="card shadow bg-light text-center text-secondary mb-3">
-    <h2>Editar Cita</h2>
-  </div>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-secondary">Guardar cambios</button>
-  </form>
+<div class="card shadow bg-light text-center text-secondary mb-3">
+  <h2>Editar Cita</h2>
+</div>
+<div class="container mt-5">
+    <form method="post">
+        {% csrf_token %} 
+        <!-- Mostrar errores del formulario -->
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger text-center">
+            {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {{ form.as_p }}
+
+        <button type="submit" class="btn btn-secondary">Guardar cambios</button>
+    </form>
+</div>
 {% endblock %}
