@@ -57,10 +57,10 @@ def reservar_cita(request):
             fecha = form.cleaned_data['fecha']
             hora = form.cleaned_data['hora']
             fecha_hora = datetime.combine(fecha, hora)
-            
+
             # Convertir a timezone-aware si USE_TZ está habilitado
             if timezone.is_naive(fecha_hora):
-                fecha_hora = timezone.make_aware(fecha_hora)
+                fecha_hora = timezone.make_aware(fecha_hora, timezone.get_current_timezone())
             
             if Cita.objects.filter(fecha=fecha_hora).exists():
                 form.add_error(None, "Ya existe una cita reservada en esa fecha y hora.")
@@ -75,6 +75,7 @@ def reservar_cita(request):
     else:
         form = CitaForm()
     return render(request, 'citas/reservar_cita.html', {'form': form})
+
 
 @login_required
 @handle_exceptions

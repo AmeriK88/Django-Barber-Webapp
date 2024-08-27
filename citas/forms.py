@@ -32,19 +32,19 @@ class CitaForm(forms.ModelForm):
 
     def clean_fecha(self):
         fecha = self.cleaned_data['fecha']
-        if fecha.weekday() >= 5: 
-            raise ValidationError("No se pueden seleccionar citas para fines de semana.")
+        if fecha.weekday() >= 5:
+            raise forms.ValidationError("No se pueden seleccionar citas para fines de semana.")
         today = timezone.now().date() 
 
         if fecha.date() < today:
-            raise ValidationError("La fecha de la cita no puede ser en el pasado.")
+            raise forms.ValidationError("La fecha de la cita no puede ser en el pasado.")
         return fecha
 
     def clean_hora(self):
         hora = self.cleaned_data['hora']
-        hora = datetime.strptime(hora, '%H:%M').time()  
+        hora = datetime.strptime(hora, '%H:%M').time()
         if hora < time(9, 30) or hora > time(19, 0):
-            raise ValidationError("La hora seleccionada está fuera del rango permitido.")
+            raise forms.ValidationError("La hora seleccionada está fuera del rango permitido.")
         return hora
 
     def clean(self):
@@ -55,8 +55,10 @@ class CitaForm(forms.ModelForm):
 
         if fecha and hora:
             fecha_hora = datetime.combine(fecha, hora)
+            if timezone.is_naive(fecha_hora):
+                fecha_hora = timezone.make_aware(fecha_hora, timezone.get_current_timezone())
             if Cita.objects.filter(fecha=fecha_hora).exclude(id=cita_id).exists():
-                raise ValidationError("Ya existe una cita reservada en esa fecha y hora.")
+                raise forms.ValidationError("Ya existe una cita reservada en esa fecha y hora.")
         return cleaned_data
 
 

@@ -34,9 +34,9 @@ class Imagen(models.Model):
 class Cita(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     servicio = models.ForeignKey(Servicio, on_delete=models.CASCADE)
-    fecha = models.DateTimeField()  
-    hora = models.TimeField() 
-    comentario = models.TextField(blank=True, null=True) 
+    fecha = models.DateTimeField()  # Asegúrate de que sea DateTimeField
+    hora = models.TimeField()  # Esta es solo la hora, pero se combina con la fecha
+    comentario = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f'Cita para {self.usuario} el {self.fecha.date()} a las {self.hora}'
