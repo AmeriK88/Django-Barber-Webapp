@@ -85,15 +85,13 @@ def editar_cita(request, cita_id):
     if request.method == 'POST':
         form = CitaForm(request.POST, instance=cita)
         if form.is_valid():
-            fecha = form.cleaned_data['fecha']
-            hora = form.cleaned_data['hora']
-            cita.fecha = datetime.combine(fecha, hora)
-            cita.save()
+            form.save()
             messages.success(request, '¡Cita actualizada con éxito!')
             return redirect('citas:ver_citas')
     else:
         form = CitaForm(instance=cita)
     return render(request, 'citas/editar_cita.html', {'form': form})
+
 
 @login_required
 @handle_exceptions
