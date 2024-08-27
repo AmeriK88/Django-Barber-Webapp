@@ -1,8 +1,28 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Servicio, Cita, Resena, Imagen
+from .models import Servicio, Cita, Resena, Imagen, UserProfile
+from django.contrib.auth.models import User
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-# Register your models here.
+# Definir el perfil de usuario como un Inline de User
+class UserProfileInline(admin.StackedInline):
+    model = UserProfile
+    can_delete = False
+    verbose_name_plural = 'Perfil del Usuario'
+
+# Clase UserAdmin que incluya el Inline de UserProfile
+class UserAdmin(BaseUserAdmin):
+    inlines = (UserProfileInline,)
+    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'mostrar_telefono')
+
+    def mostrar_telefono(self, obj):
+        return obj.userprofile.telefono if hasattr(obj, 'userprofile') else 'No tiene'
+    mostrar_telefono.short_description = 'Teléfono'
+
+# Re-registra el modelo UserAdmin
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
+
 @admin.register(Servicio)
 class ServicioAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'descripcion', 'precio')  
