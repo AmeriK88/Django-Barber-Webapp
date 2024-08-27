@@ -87,15 +87,29 @@ def ver_citas(request):
 @handle_exceptions
 def editar_cita(request, cita_id):
     cita = get_object_or_404(Cita, id=cita_id, usuario=request.user)
+    
     if request.method == 'POST':
         form = CitaForm(request.POST, instance=cita)
         if form.is_valid():
+            fecha = form.cleaned_data['fecha']
+            hora = form.cleaned_data['hora']
+            fecha_hora = datetime.combine(fecha, hora)
+
+            # Convertir a timezone-aware si USE_TZ está habilitado
+            if timezone.is_naive(fecha_hora):
+                fecha_hora = timezone.make_aware(fecha_hora, timezone.get_current_timezone())
+            
+            cita.fecha = fecha_hora
+            cita.hora = hora
             form.save()
+            
             messages.success(request, '¡Cita actualizada con éxito!')
             return redirect('citas:ver_citas')
     else:
         form = CitaForm(instance=cita)
+    
     return render(request, 'citas/editar_cita.html', {'form': form})
+
 
 
 @login_required
