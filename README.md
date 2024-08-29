@@ -116,6 +116,10 @@ Ahora puedes acceder a la aplicación en http://127.0.0.1:8000/. Si quieres acce
 **Instalación de Grappelli
   Asegúrate de tener Grappelli instalado en tu entorno y de añadir 'grappelli' a la lista de INSTALLED_APPS en settings.py antes de 'django.contrib.admin'. Puedes instalarlo con:  pip install django-grappelli
 
+## Generador código Qr 
+
+Ejecuta generate_qr.py - asegúrate de incluir la url de tu sitio.
+
 
 ## Imágenes
 
