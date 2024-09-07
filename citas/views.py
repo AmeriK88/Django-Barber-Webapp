@@ -31,6 +31,8 @@ def register(request):
             user = authenticate(username=username, password=raw_password)
             if user:
                 auth_login(request, user)
+                messages.success(request, f'¡Bienvenido a Ca\'Bigote, {username}! Tu cuenta ha sido creada con éxito.')
+
                 return redirect('citas:perfil_usuario')
     else:
         form = CustomUserCreationForm()
@@ -43,6 +45,8 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             auth_login(request, user)
+            messages.success(request, f'¡Hola de nuevo, {user.username}! Qué gusto verte por aquí.')
+
             return redirect('citas:perfil_usuario')
     else:
         form = AuthenticationForm()

@@ -6,17 +6,31 @@
 </div>
 <div class="container mt-5">
     <form method="post">
-        {% csrf_token %} 
+        {% csrf_token %}
+
         <!-- Mostrar errores del formulario -->
-        {% if form.non_field_errors %}
+        {% if form.errors %}
         <div class="alert alert-danger text-center">
+            {% for field in form %}
+                {% if field.errors %}
+                    {% for error in field.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
             {% for error in form.non_field_errors %}
                 <p>{{ error }}</p>
             {% endfor %}
         </div>
         {% endif %}
 
-        {{ form.as_p }}
+        <!-- Mostrar campos del formulario sin mostrar errores por defecto -->
+        {% for field in form %}
+            <div class="form-group">
+                {{ field.label_tag }} 
+                {{ field }}
+            </div>
+        {% endfor %}
 
         <button type="submit" class="btn btn-secondary">Guardar cambios</button>
     </form>
