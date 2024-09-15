@@ -13,12 +13,19 @@ def enviar_confirmacion_cita(usuario_email, cita):
     Hora: {cita.hora}
     Comentario: {cita.comentario}
 
-    Si necesitas hacer algún cambio, por favor, contáctanos.
+    En caso de no poder asistir, puede editar su cita desde nuestra app!
 
     ¡Te esperamos!
 
     Atentamente,
     Ca´Bigote Barber Shop
+
+    ---
+
+    Dirección: Calle Ejemplo 123, Ciudad
+    Teléfono: +123 456 789
+    Instagram: @cabigote_barber_shop
+    ¡Síguenos para más novedades!
     """
     send_mail(
         asunto,
