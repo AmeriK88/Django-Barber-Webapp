@@ -25,7 +25,7 @@ def enviar_confirmacion_cita(usuario_email, cita):
     Dirección: Calle Ejemplo 123, Ciudad
     Teléfono: +123 456 789
     Instagram: @cabigote_barber_shop
-    ¡Síguenos para más novedades!
+    ¡Síguenos para más novedades!git a
     """
     send_mail(
         asunto,
