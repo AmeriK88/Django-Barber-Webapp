@@ -95,6 +95,10 @@ def ver_citas(request):
 def editar_cita(request, cita_id):
     cita = get_object_or_404(Cita, id=cita_id, usuario=request.user)
     
+    # Obtener todas las fechas donde las horas estén completamente ocupadas
+    horas_por_dia = Cita.objects.values('fecha__date').annotate(total_citas=Count('hora')).filter(total_citas=len(CitaForm.HORA_CHOICES))
+    fechas_ocupadas = [entry['fecha__date'].isoformat() for entry in horas_por_dia]
+
     if request.method == 'POST':
         form = CitaForm(request.POST, instance=cita)
         if form.is_valid():
@@ -115,8 +119,7 @@ def editar_cita(request, cita_id):
     else:
         form = CitaForm(instance=cita)
     
-    return render(request, 'citas/editar_cita.html', {'form': form})
-
+    return render(request, 'citas/editar_cita.html', {'form': form, 'fechas_ocupadas': fechas_ocupadas})
 
 
 @login_required
