@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load static %}
+
 {% block title %}Citas - Cabigote Barber Shop{% endblock %}
 
 {% block content %}
@@ -30,4 +32,8 @@
         <button type="submit" class="btn btn-secondary">Reservar</button>
     </form>
 </div>
+<script>
+    const fechasOcupadas = {{ fechas_ocupadas|safe }};
+</script>
+<script src="{% static 'js/disableDates.js' %}"></script>
 {% endblock %}

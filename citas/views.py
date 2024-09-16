@@ -9,6 +9,7 @@ from .models import Servicio, Resena, Imagen, Cita, UserProfile
 from .forms import CitaForm, ResenaForm, CustomUserCreationForm, UserProfileForm, UserForm
 from .utils import enviar_confirmacion_cita
 from .decorators import handle_exceptions
+from django.db.models import Count
 
 def home(request):
     return render(request, 'citas/home.html')
@@ -53,6 +54,10 @@ def login_view(request):
 @login_required
 @handle_exceptions
 def reservar_cita(request):
+    # Obtener todas las fechas donde las horas estén completamente ocupadas
+    horas_por_dia = Cita.objects.values('fecha__date').annotate(total_citas=Count('hora')).filter(total_citas=len(CitaForm.HORA_CHOICES))
+    fechas_ocupadas = [entry['fecha__date'].isoformat() for entry in horas_por_dia]  # Convertir a formato ISO para JavaScript
+
     if request.method == 'POST':
         form = CitaForm(request.POST)
         if form.is_valid():
@@ -60,7 +65,6 @@ def reservar_cita(request):
             hora = form.cleaned_data['hora']
             fecha_hora = datetime.combine(fecha, hora)
 
-            # Convertir a timezone-aware si USE_TZ está habilitado
             if timezone.is_naive(fecha_hora):
                 fecha_hora = timezone.make_aware(fecha_hora, timezone.get_current_timezone())
             
@@ -76,7 +80,8 @@ def reservar_cita(request):
                 return redirect('citas:perfil_usuario')
     else:
         form = CitaForm()
-    return render(request, 'citas/reservar_cita.html', {'form': form})
+
+    return render(request, 'citas/reservar_cita.html', {'form': form, 'fechas_ocupadas': fechas_ocupadas})
 
 
 @login_required
