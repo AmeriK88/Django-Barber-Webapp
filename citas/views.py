@@ -94,6 +94,11 @@ def ver_citas(request):
 @handle_exceptions
 def editar_cita(request, cita_id):
     cita = get_object_or_404(Cita, id=cita_id, usuario=request.user)
+
+    # Verifica si la cita ya ha pasado
+    if cita.fecha < timezone.now():
+        messages.error(request, 'No puedes editar una cita que ya ha finalizado.')
+        return redirect('citas:ver_citas')
     
     # Obtener todas las fechas donde las horas estén completamente ocupadas
     horas_por_dia = Cita.objects.values('fecha__date').annotate(total_citas=Count('hora')).filter(total_citas=len(CitaForm.HORA_CHOICES))
@@ -120,6 +125,7 @@ def editar_cita(request, cita_id):
         form = CitaForm(instance=cita)
     
     return render(request, 'citas/editar_cita.html', {'form': form, 'fechas_ocupadas': fechas_ocupadas})
+
 
 
 @login_required
