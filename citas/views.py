@@ -1,4 +1,3 @@
-# citas/views.py
 from django.contrib.auth import logout as auth_logout, login as auth_login, authenticate, update_session_auth_hash
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
@@ -6,7 +5,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from datetime import datetime
 from django.utils import timezone
-from django.urls import reverse
 from .models import Servicio, Resena, Imagen, Cita, UserProfile
 from .forms import CitaForm, ResenaForm, CustomUserCreationForm, UserProfileForm, UserForm
 from .utils import enviar_confirmacion_cita
