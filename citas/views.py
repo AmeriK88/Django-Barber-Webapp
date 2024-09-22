@@ -44,7 +44,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             auth_login(request, user)
-            messages.success(request, f'¡Hola de nuevo, {user.username}! Qué gusto verte por aquí.')
+            messages.success(request, f'Bienvenido de nuevo, {user.username}!')
 
             return redirect('citas:perfil_usuario')
     else:
@@ -125,7 +125,6 @@ def editar_cita(request, cita_id):
         form = CitaForm(instance=cita)
     
     return render(request, 'citas/editar_cita.html', {'form': form, 'fechas_ocupadas': fechas_ocupadas})
-
 
 
 @login_required
