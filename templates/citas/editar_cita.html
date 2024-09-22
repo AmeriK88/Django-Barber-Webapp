@@ -9,32 +9,36 @@
 <div class="container mt-5">
     <form method="post">
         {% csrf_token %}
+        
+        {% if form.non_field_errors %}
+        <div class="alert alert-error">
+            {{ form.non_field_errors }}
+        </div>
+        {% endif %}
 
-        <!-- Mostrar errores del formulario -->
         {% if form.errors %}
-        <div class="alert alert-danger text-center">
+        <div class="alert alert-error">
             {% for field in form %}
                 {% if field.errors %}
                     {% for error in field.errors %}
-                        <p>{{ error }}</p>
+                    <div>
+                        {{ error }}
+                    </div>
                     {% endfor %}
                 {% endif %}
-            {% endfor %}
-            {% for error in form.non_field_errors %}
-                <p>{{ error }}</p>
             {% endfor %}
         </div>
         {% endif %}
 
-        <!-- Mostrar campos del formulario sin mostrar errores por defecto -->
+        <!-- Mostrar campos del formulario sin errores debajo -->
         {% for field in form %}
-            <div class="form-group">
-                {{ field.label_tag }} 
+            <div class="form-group {% if field.errors %}is-invalid{% endif %}">
+                {{ field.label_tag }}
                 {{ field }}
             </div>
         {% endfor %}
 
-        <button type="submit" class="btn btn-secondary">Guardar cambios</button>
+        <button type="submit" class="btn btn-secondary">Reservar</button>
     </form>
 </div>
 <script>

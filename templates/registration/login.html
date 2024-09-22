@@ -6,11 +6,39 @@
 <div class="card bg-white text-secondary text-center mb-5 mt-5">
     <h2>Login</h2>
 </div>
+
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    
+    {% if form.non_field_errors %}
+    <div class="alert alert-error">
+        {{ form.non_field_errors }}
+    </div>
+    {% endif %}
+    
+    <div class="{% if form.username.errors %}is-invalid{% endif %}">
+        {{ form.username.label_tag }}
+        {{ form.username }}
+        {% for error in form.username.errors %}
+        <div class="invalid-feedback">
+            {{ error }}
+        </div>
+        {% endfor %}
+    </div>
+    
+    <div class="{% if form.password.errors %}is-invalid{% endif %}">
+        {{ form.password.label_tag }}
+        {{ form.password }}
+        {% for error in form.password.errors %}
+        <div class="invalid-feedback">
+            {{ error }}
+        </div>
+        {% endfor %}
+    </div>
+    
     <button type="submit" class="btn btn-secondary">Login</button>
 </form>
+
 <div class="card bg-white text-center mt-3">
     <p>¿No tienes cuenta? 👉 <a href="{% url 'citas:register' %}">Registrarse</a></p>
     <p>¿Olvidaste tu contraseña? 👉 <a href="{% url 'password_reset' %}">Recuperar Contraseña</a></p>

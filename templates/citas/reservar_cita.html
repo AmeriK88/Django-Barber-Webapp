@@ -5,33 +5,45 @@
 {% block title %}Citas - Cabigote Barber Shop{% endblock %}
 
 {% block content %}
-<!-- Contenido -->
 <div class="container mt-5">
     <div class="card shadow bg-light text-center text-secondary mb-5">
         <h1 class="mb-4">Reservar tu cita</h1>
     </div>
     <form method="post">
         {% csrf_token %}
+        
+        {% if form.non_field_errors %}
+        <div class="alert alert-error">
+            {{ form.non_field_errors }}
+        </div>
+        {% endif %}
+
         {% if form.errors %}
-        <div class="alert alert-danger text-center">
+        <div class="alert alert-error">
             {% for field in form %}
                 {% if field.errors %}
                     {% for error in field.errors %}
-                        <p>{{ error }}</p>
+                    <div>
+                        {{ error }}
+                    </div>
                     {% endfor %}
                 {% endif %}
-            {% endfor %}
-            {% for error in form.non_field_errors %}
-                <p>{{ error }}</p>
             {% endfor %}
         </div>
         {% endif %}
 
-        {{ form.as_p }}
+        <!-- Mostrar campos del formulario sin errores debajo -->
+        {% for field in form %}
+            <div class="form-group {% if field.errors %}is-invalid{% endif %}">
+                {{ field.label_tag }}
+                {{ field }}
+            </div>
+        {% endfor %}
 
         <button type="submit" class="btn btn-secondary">Reservar</button>
     </form>
 </div>
+
 <script>
     const fechasOcupadas = {{ fechas_ocupadas|safe }};
 </script>
