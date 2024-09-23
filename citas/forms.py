@@ -97,10 +97,12 @@ class CustomUserCreationForm(UserCreationForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.email = self.cleaned_data["email"]
-        user.phone = self.cleaned_data["phone"]  
         if commit:
             user.save()
+        phone = self.cleaned_data["phone"]
+        UserProfile.objects.create(user=user, telefono=phone, email=user.email)
         return user
+
     
 class CustomAuthenticationForm(AuthenticationForm):
     captcha = ReCaptchaField()
