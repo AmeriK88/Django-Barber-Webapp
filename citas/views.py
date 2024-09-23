@@ -95,12 +95,12 @@ def ver_citas(request):
 def editar_cita(request, cita_id):
     cita = get_object_or_404(Cita, id=cita_id, usuario=request.user)
 
-    # Verifica si la cita ya ha pasado
+    # Verifica caducidad cita
     if cita.fecha < timezone.now():
         messages.error(request, 'No puedes editar una cita que ya ha finalizado.')
         return redirect('citas:ver_citas')
     
-    # Obtener todas las fechas donde las horas estén completamente ocupadas
+    # Obtener echas con horas completamente ocupadas
     horas_por_dia = Cita.objects.values('fecha__date').annotate(total_citas=Count('hora')).filter(total_citas=len(CitaForm.HORA_CHOICES))
     fechas_ocupadas = [entry['fecha__date'].isoformat() for entry in horas_por_dia]
 
@@ -132,7 +132,6 @@ def editar_cita(request, cita_id):
 def eliminar_cita(request, cita_id):
     cita = get_object_or_404(Cita, id=cita_id, usuario=request.user)
     
-    # Comprobamos si la cita se puede cancelar
     if not cita.puede_cancelar():
         return render(request, 'citas/eliminar_cita.html', {
             'cita': cita,
@@ -221,7 +220,7 @@ def editar_perfil_usuario(request):
             user_form.save()
             profile_form.save()
             password_form.save()
-            update_session_auth_hash(request, request.user)  # Mantener la sesión activa después de cambiar la contraseña
+            update_session_auth_hash(request, request.user)  
             messages.success(request, 'Tu perfil ha sido actualizado exitosamente.')
             return redirect('citas:editar_perfil_usuario')
         else:

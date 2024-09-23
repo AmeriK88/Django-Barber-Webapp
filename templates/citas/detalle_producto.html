@@ -11,7 +11,7 @@
 
     <div class="row justify-content-center">
         <!-- Imagen del Producto y Detalles -->
-        <div class="col-md-12"> <!-- Aquí se ajusta la columna al 80% -->
+        <div class="col-md-12"> 
             <div class="card shadow-lg">
                 <img src="{{ producto.imagen.url }}" alt="{{ producto.titulo }}" class="img-fluid rounded-top">
                 <div class="card-body">
@@ -25,10 +25,9 @@
                         <span class="badge bg-success fs-4 text-light">€{{ producto.precio }}</span>
                     </div>
                     {% endif %}
-
-                    <!-- Botón de Acción (opcional) -->
+                   
                     <div class="text-center mt-4">
-                        <a href="#" class="btn btn-primary">Comprar Ahora</a>
+                        <a href="#" class="btn btn-primary">Disponible</a>
                     </div>
                 </div>
             </div>

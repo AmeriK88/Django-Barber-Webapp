@@ -10,7 +10,7 @@ class UserProfileInline(admin.StackedInline):
     can_delete = False
     verbose_name_plural = 'Perfil del Usuario'
 
-# Clase UserAdmin que incluya el Inline de UserProfile
+
 class UserAdmin(BaseUserAdmin):
     inlines = (UserProfileInline,)
     list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'mostrar_telefono')
@@ -18,6 +18,7 @@ class UserAdmin(BaseUserAdmin):
     def mostrar_telefono(self, obj):
         return obj.userprofile.telefono if hasattr(obj, 'userprofile') else 'No tiene'
     mostrar_telefono.short_description = 'Teléfono'
+
 
 # Re-registra el modelo UserAdmin
 admin.site.unregister(User)

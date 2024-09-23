@@ -5,6 +5,7 @@ from .views import editar_perfil_usuario
 
 app_name = 'citas'
 
+
 urlpatterns = [
     path('', views.home, name='home'),  
     path('servicios/', views.servicios, name='servicios'),

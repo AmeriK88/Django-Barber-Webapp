@@ -1,34 +1,35 @@
 {% extends "base.html" %}
-
 {% load static %}
 
 {% block content %}
 <div class="card shadow bg-light text-center text-secondary mb-3">
   <h2>Editar Cita</h2>
 </div>
+
 <div class="container mt-5">
     <form method="post">
         {% csrf_token %}
-        
+
+        <!-- Mostrar errores del formulario -->
         {% if form.non_field_errors or form.errors %}
             <div class="alert alert-error">
+                <!-- Mostrar errores generales del formulario -->
                 {% if form.non_field_errors %}
                     {{ form.non_field_errors }}
                 {% endif %}
-                
+
+                <!-- Mostrar errores específicos de los campos -->
                 {% for field in form %}
                     {% if field.errors %}
                         {% for error in field.errors %}
-                            <div>
-                                {{ error }}
-                            </div>
+                            <div>{{ error }}</div>
                         {% endfor %}
                     {% endif %}
                 {% endfor %}
             </div>
         {% endif %}
 
-        <!-- Mostrar campos del formulario sin errores debajo -->
+        <!-- Renderizar cada campo del formulario -->
         {% for field in form %}
             <div class="form-group {% if field.errors %}is-invalid{% endif %}">
                 {{ field.label_tag }}
@@ -36,11 +37,15 @@
             </div>
         {% endfor %}
 
+        <!-- Botón de envío -->
         <button type="submit" class="btn btn-secondary">Reservar</button>
     </form>
 </div>
+
+<!-- Script para deshabilitar fechas ocupadas -->
 <script>
     const fechasOcupadas = {{ fechas_ocupadas|safe }};
 </script>
 <script src="{% static 'js/disableDates.js' %}"></script>
+
 {% endblock %}

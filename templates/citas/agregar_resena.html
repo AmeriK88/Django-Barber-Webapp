@@ -5,19 +5,27 @@
 {% block content %}
 <div class="container mt-5">
     <h1 class="mb-4">Añadir Reseña</h1>
+
     <div class="card mb-4">
         <div class="card-header">Formulario de Reseña</div>
+        
         <div class="card-body">
             <form method="post">
                 {% csrf_token %}
+
+                <!-- Campo para seleccionar el servicio -->
                 <div class="mb-3">
                     {{ form.servicio.label_tag }}
                     {{ form.servicio }}
                 </div>
+
+                <!-- Campo para escribir la reseña -->
                 <div class="mb-3">
                     {{ form.texto.label_tag }}
                     {{ form.texto }}
                 </div>
+
+                <!-- Campo para la puntuación (radio buttons) -->
                 <div class="mb-3">
                     {{ form.puntuacion.label_tag }}
                     <div class="d-flex flex-row">
@@ -28,8 +36,11 @@
                             </div>
                         {% endfor %}
                     </div>
+                    <!-- Mostrar errores de puntuación si los hay -->
                     {{ form.puntuacion.errors }}
                 </div>
+
+                <!-- Botón de envío -->
                 <button type="submit" class="btn btn-primary">Enviar</button>
             </form>
         </div>
