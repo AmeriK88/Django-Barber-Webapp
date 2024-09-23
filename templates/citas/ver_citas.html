@@ -29,10 +29,9 @@
                             <p class="card-text"><strong>Hora:</strong> {{ citas.0.hora }}</p>
                             <p class="card-text"><strong>Comentario:</strong> {{ citas.0.comentario }}</p>
                             <div class="d-flex justify-content-between align-items-center mt-3">
-                                <!-- Botón de Editar -->
+
                                 <a href="{% url 'citas:editar_cita' citas.0.id %}" class="btn btn-primary">Editar</a>
                                 
-                                <!-- Enlace a la Confirmación de Eliminación -->
                                 <a href="{% url 'citas:eliminar_cita' citas.0.id %}" class="btn btn-danger">Eliminar</a>
                             </div>                            
                         </div>
@@ -48,10 +47,9 @@
                             <p class="card-text"><strong>Hora:</strong> {{ cita.hora }}</p>
                             <p class="card-text"><strong>Comentario:</strong> {{ cita.comentario }}</p>
                             <div class="mt-auto d-flex justify-content-between">
-                                <!-- Botones de acción -->
+
                                 <a href="{% url 'citas:editar_cita' cita.id %}" class="btn btn-primary">Editar</a>
                                 
-                                <!-- Enlace a la Confirmación de Eliminación -->
                                 <a href="{% url 'citas:eliminar_cita' cita.id %}" class="btn btn-danger">Eliminar</a>
                             </div>
                         </div>

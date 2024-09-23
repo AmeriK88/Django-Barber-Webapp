@@ -32,7 +32,7 @@
                 {% csrf_token %}
 
                 <!-- Formulario de Usuario -->
-                <div class="mb-3">
+                <div class="mb-3 text-light">
                     <h4>Correo Electrónico actual</h4>
                     {{ user_form.non_field_errors }}
                     {% for field in user_form %}
@@ -51,7 +51,7 @@
                 </div>
 
                 <!-- Formulario de Perfil -->
-                <div class="mb-3">
+                <div class="mb-3 text-light">
                     <h4>Actualizar información</h4>
                     {{ profile_form.non_field_errors }}
                     {% for field in profile_form %}
@@ -70,7 +70,7 @@
                 </div>
 
                 <!-- Formulario de Cambio de Contraseña -->
-                <div class="mb-3">
+                <div class="mb-3 text-light">
                     <h4>Cambiar Contraseña</h4>
                     {{ password_form.non_field_errors }}
                     {% for field in password_form %}

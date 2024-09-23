@@ -48,8 +48,8 @@ INSTALLED_APPS = [
     'citas',
     'django_recaptcha',
     'colorfield',
-      
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -155,6 +155,7 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 # Configuraciones capchat
 RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY')
 RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY')
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/

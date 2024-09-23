@@ -8,7 +8,7 @@
   <p class="text-center">¿Estás seguro de que quieres cancelar la cita para <strong>{{ cita.servicio.nombre }}</strong> el <strong>{{ cita.fecha.date }}</strong> a las <strong>{{ cita.hora }}</strong>?</p>
   
   {% if error_message %}
-    <div class="alert alert-danger text-center" role="alert">
+    <div class="alert alert-error text-center" role="alert">
       {{ error_message }}
     </div>
   {% endif %}
