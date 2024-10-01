@@ -54,7 +54,7 @@ def login_view(request):
 @login_required
 @handle_exceptions
 def reservar_cita(request):
-    # Obtener todas las fechas donde las horas estén completamente ocupadas
+    # Obtener fechas donde las horas estén completamente ocupadas
     horas_por_dia = Cita.objects.values('fecha__date').annotate(total_citas=Count('hora')).filter(total_citas=len(CitaForm.HORA_CHOICES))
     fechas_ocupadas = [entry['fecha__date'].isoformat() for entry in horas_por_dia]  # Convertir a formato ISO para JavaScript
 
@@ -100,7 +100,7 @@ def editar_cita(request, cita_id):
         messages.error(request, 'No puedes editar una cita que ya ha finalizado.')
         return redirect('citas:ver_citas')
     
-    # Obtener echas con horas completamente ocupadas
+    # Obtener fechas con horas completamente ocupadas
     horas_por_dia = Cita.objects.values('fecha__date').annotate(total_citas=Count('hora')).filter(total_citas=len(CitaForm.HORA_CHOICES))
     fechas_ocupadas = [entry['fecha__date'].isoformat() for entry in horas_por_dia]
 

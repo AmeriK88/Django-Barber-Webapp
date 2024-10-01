@@ -4,24 +4,9 @@
 
 {% block content %}
     <div class="container mt-3">
-
-        <!-- Mostrar mensajes de éxito o error -->
-        {% if messages %}
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-12"> 
-                        <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
-                            {% for message in messages %}
-                                {{ message }}
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        {% endif %}
-
-        <a  href="{% url 'citas:editar_perfil_usuario' %}" class="btn btn-info btn-sm ml-2 mt-3">Editar Perfil</a>
+        <a href="{% url 'citas:editar_perfil_usuario' %}" class="btn btn-info btn-sm ml-2 mt-3">Editar Perfil</a>
     </div>
+
     <div class="container mt-5">
         <div class="card shadow bg-light text-center text-secondary mb-3" style="padding: 20px 20px;">
             <h2>Perfil de Usuario</h2>
