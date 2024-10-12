@@ -87,8 +87,10 @@ def reservar_cita(request):
 @login_required
 @handle_exceptions
 def ver_citas(request):
-    citas = Cita.objects.filter(usuario=request.user)
-    return render(request, 'citas/ver_citas.html', {'citas': citas})
+    citas_activas = Cita.objects.filter(usuario=request.user, fecha__gte=timezone.now())  
+    citas_pasadas = Cita.objects.filter(usuario=request.user, fecha__lt=timezone.now()) 
+    return render(request, 'citas/ver_citas.html', {'citas_activas': citas_activas, 'citas_pasadas': citas_pasadas})
+
 
 @login_required
 @handle_exceptions
@@ -203,8 +205,9 @@ def detalle_producto(request, producto_id):
 @login_required
 @handle_exceptions
 def perfil_usuario(request):
-    citas = Cita.objects.filter(usuario=request.user)
-    return render(request, 'citas/perfil_usuario.html', {'citas': citas})
+    citas_activas = Cita.objects.filter(usuario=request.user, fecha__gte=timezone.now()) 
+    return render(request, 'citas/perfil_usuario.html', {'citas': citas_activas})
+
 
 @login_required
 @handle_exceptions

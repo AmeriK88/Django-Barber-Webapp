@@ -129,6 +129,17 @@ li {
     text-align: center;
 }
 
+/* Tempalte titles */
+
+.main-title {
+    font-size: 2.5rem; 
+    font-weight: bold;
+    color: #2c3e50; 
+    text-transform: uppercase; 
+    letter-spacing: 2px; 
+    margin-bottom: 30px; 
+}
+
 /* Card Styles */
 .card,
 .card-user-profile {

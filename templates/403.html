@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>403 - Prohibido</title>
-</head>
-<body>
-    <h1>403 - Prohibido</h1>
-    <p>No tienes permiso para acceder a esta página.</p>
-    <a href="{% url 'citas:home' %}">Volver a la página de inicio</a>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}403 - Prohibido{% endblock %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h1 class="display-4 text-danger">403 - Prohibido</h1>
+    <p class="lead">No tienes permiso para acceder a esta página.</p>
+    <a href="{% url 'citas:home' %}" class="btn btn-primary mt-3">Volver a la página de inicio</a>
+</div>
+{% endblock %}

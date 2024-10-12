@@ -5,7 +5,6 @@ from .views import editar_perfil_usuario
 
 app_name = 'citas'
 
-
 urlpatterns = [
     path('', views.home, name='home'),  
     path('servicios/', views.servicios, name='servicios'),
@@ -25,7 +24,6 @@ urlpatterns = [
     path('accounts/reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('accounts/reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     path('perfil/editar/', editar_perfil_usuario, name='editar_perfil_usuario'),
-    path('producto/<int:producto_id>/', views.detalle_producto, name='detalle_producto'),
-    
+    path('producto/<int:producto_id>/', views.detalle_producto, name='detalle_producto'), 
 ]
 

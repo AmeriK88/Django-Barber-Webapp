@@ -18,13 +18,13 @@
     </div>
     {% endif %}
 
-
-    <div class="container mt-3">
+    <div class="container mt-3 d-flex">
         <a href="{% url 'citas:editar_perfil_usuario' %}" class="btn btn-info btn-sm ml-2 mt-3">Editar Perfil</a>
+        <a href="{% url 'citas:ver_citas' %}" class="btn btn-secondary btn-sm ml-2 mt-3">Mis citas</a>
     </div>
 
     <div class="container mt-5">
-        <div class="card shadow bg-light text-center text-secondary mb-3" style="padding: 20px 20px;">
+        <div class="card shadow bg-light text-center text-secondary mb-3 main-title" style="padding: 20px 20px;">
             <h2>Perfil de Usuario</h2>
         </div>
             {% if citas %}

@@ -4,11 +4,11 @@
 
 {% block content %}
 <div class="container mt-5">
-    <div class="card shadow bg-light text-center text-secondary mb-5">
+    <div class="card shadow bg-light text-center text-secondary mb-5 main-title">
         <h1>Reseñas</h1>
     </div>
 
-    <!-- Mostrar las reseñas existentes -->
+    <!-- Mostrar reseñas existentes -->
     <div class="mb-4">
         {% if resenas %}
             {% for resena in resenas %}
@@ -25,7 +25,7 @@
         {% endif %}
     </div>
 
-    <!-- Mostrar el formulario de reseñas solo si el usuario está autenticado -->
+    <!-- Mostrar formulario solo si el usuario está autenticado -->
     {% if user.is_authenticated %}
     <div class="container mt-5">
         <div class="card mb-4">
