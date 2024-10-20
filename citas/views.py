@@ -7,7 +7,7 @@ from datetime import datetime
 from django.utils import timezone
 from .models import Servicio, Resena, Imagen, Cita, UserProfile
 from .forms import CitaForm, ResenaForm, CustomUserCreationForm, UserProfileForm, UserForm
-from .utils import enviar_confirmacion_cita
+from .utils import enviar_confirmacion_cita, enviar_notificacion_modificacion_cita, enviar_notificacion_eliminacion_cita
 from .decorators import handle_exceptions
 from django.db.models import Count
 
@@ -54,9 +54,9 @@ def login_view(request):
 @login_required
 @handle_exceptions
 def reservar_cita(request):
-    # Obtener fechas donde las horas estén completamente ocupadas
+    # Obtener fechas ocupadas convertir a formato ISO para JavaScript
     horas_por_dia = Cita.objects.values('fecha__date').annotate(total_citas=Count('hora')).filter(total_citas=len(CitaForm.HORA_CHOICES))
-    fechas_ocupadas = [entry['fecha__date'].isoformat() for entry in horas_por_dia]  # Convertir a formato ISO para JavaScript
+    fechas_ocupadas = [entry['fecha__date'].isoformat() for entry in horas_por_dia]  
 
     if request.method == 'POST':
         form = CitaForm(request.POST)
@@ -120,6 +120,9 @@ def editar_cita(request, cita_id):
             cita.fecha = fecha_hora
             cita.hora = hora
             form.save()
+
+            # Enviar notificación de modificación de cita
+            enviar_notificacion_modificacion_cita(request.user.email, cita)
             
             messages.success(request, '¡Cita actualizada con éxito!')
             return redirect('citas:ver_citas')
@@ -127,6 +130,7 @@ def editar_cita(request, cita_id):
         form = CitaForm(instance=cita)
     
     return render(request, 'citas/editar_cita.html', {'form': form, 'fechas_ocupadas': fechas_ocupadas})
+
 
 
 @login_required
@@ -141,7 +145,19 @@ def eliminar_cita(request, cita_id):
         })
 
     if request.method == 'POST':
+        # Guardar detalles de la cita antes de eliminarla para enviar el correo
+        cita_detalle = {
+            'email': request.user.email,
+            'servicio': cita.servicio.nombre,
+            'fecha': cita.fecha,
+            'hora': cita.hora
+        }
+        
         cita.delete()
+
+        # Enviar notificación de eliminación de cita con los detalles guardados
+        enviar_notificacion_eliminacion_cita(cita_detalle['email'], cita_detalle)
+        
         messages.success(request, "La cita ha sido cancelada.")
         return redirect('citas:ver_citas')
 
