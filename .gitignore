@@ -24,8 +24,4 @@ migrations/
 media/
 
 # Imagen Qrgit log
-
 registro_qr.png
-
-# Gnerador de Qr
-generate_qr.py

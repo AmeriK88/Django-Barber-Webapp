@@ -134,6 +134,12 @@ EMAIL_USE_TLS = env('EMAIL_USE_TLS')
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 
+# Leer y procesar ADMINS desde el archivo .env
+admins_env = env('ADMINS', default='')
+
+# Convertir el valor en una lista de tuplas
+ADMINS = [tuple(admin.split(',')) for admin in admins_env.split(';')] if admins_env else []
+
 # Configuraciones capchat
 RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY')
 RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY')

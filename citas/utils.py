@@ -35,6 +35,17 @@ def enviar_confirmacion_cita(usuario_email, cita):
         fail_silently=False,
     )
 
+     # Enviar notificación al administrador
+    if settings.ADMINS:
+        admin_emails = [admin[1] for admin in settings.ADMINS]
+        send_mail(
+            'Nueva cita reservada en Ca´Bigote',
+            f'Un usuario ha reservado una cita:\n\nServicio: {cita.servicio.nombre}\nFecha: {cita.fecha}\nHora: {cita.hora}',
+            settings.EMAIL_HOST_USER,
+            admin_emails,
+            fail_silently=False,
+        )
+
 def enviar_notificacion_eliminacion_cita(usuario_email, cita_detalle):
     asunto = 'Tu cita en Ca´Bigote Barber Shop ha sido eliminada'
     mensaje = f"""
@@ -61,6 +72,17 @@ def enviar_notificacion_eliminacion_cita(usuario_email, cita_detalle):
         [usuario_email],
         fail_silently=False,
     )
+    
+    # Enviar notificación al administrador
+    if settings.ADMINS:
+        admin_emails = [admin[1] for admin in settings.ADMINS]
+        send_mail(
+            'Cita eliminada en Ca´Bigote',
+            f'Un usuario ha eliminado una cita:\n\nServicio: {cita_detalle["servicio"]}\nFecha: {cita_detalle["fecha"]}\nHora: {cita_detalle["hora"]}',
+            settings.EMAIL_HOST_USER,
+            admin_emails,
+            fail_silently=False,
+        )
 
 
 def enviar_notificacion_modificacion_cita(usuario_email, cita):
@@ -92,3 +114,14 @@ def enviar_notificacion_modificacion_cita(usuario_email, cita):
         [usuario_email],
         fail_silently=False,
     )
+
+    # Enviar notificación al administrador
+    if settings.ADMINS:
+        admin_emails = [admin[1] for admin in settings.ADMINS]
+        send_mail(
+            'Cita modificada en Ca´Bigote',
+            f'Un usuario ha modificado una cita:\n\nServicio: {cita.servicio.nombre}\nNueva fecha: {cita.fecha}\nNueva hora: {cita.hora}',
+            settings.EMAIL_HOST_USER,
+            admin_emails,
+            fail_silently=False,
+        )
