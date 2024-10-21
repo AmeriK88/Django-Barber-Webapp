@@ -51,12 +51,30 @@ def login_view(request):
         form = AuthenticationForm()
     return render(request, 'registration/login.html', {'form': form})
 
+from django.utils import timezone
+from django.db.models import Count
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .forms import CitaForm
+from .models import Cita
+from .utils import enviar_confirmacion_cita
+from datetime import datetime
+
 @login_required
 @handle_exceptions
 def reservar_cita(request):
-    # Obtener fechas ocupadas convertir a formato ISO para JavaScript
+    # Obtener fechas ocupadas y convertirlas a formato ISO para JavaScript
     horas_por_dia = Cita.objects.values('fecha__date').annotate(total_citas=Count('hora')).filter(total_citas=len(CitaForm.HORA_CHOICES))
-    fechas_ocupadas = [entry['fecha__date'].isoformat() for entry in horas_por_dia]  
+    fechas_ocupadas = [entry['fecha__date'].isoformat() for entry in horas_por_dia]
+
+    # Crear un diccionario para almacenar las horas ocupadas para cada fecha
+    horas_ocupadas_por_fecha = {}
+    citas = Cita.objects.all()
+    for cita in citas:
+        fecha_str = cita.fecha.date().isoformat()
+        if fecha_str not in horas_ocupadas_por_fecha:
+            horas_ocupadas_por_fecha[fecha_str] = []
+        horas_ocupadas_por_fecha[fecha_str].append(cita.fecha.strftime("%H:%M"))
 
     if request.method == 'POST':
         form = CitaForm(request.POST)
@@ -67,7 +85,7 @@ def reservar_cita(request):
 
             if timezone.is_naive(fecha_hora):
                 fecha_hora = timezone.make_aware(fecha_hora, timezone.get_current_timezone())
-            
+
             if Cita.objects.filter(fecha=fecha_hora).exists():
                 form.add_error(None, "Ya existe una cita reservada en esa fecha y hora.")
             else:
@@ -81,8 +99,11 @@ def reservar_cita(request):
     else:
         form = CitaForm()
 
-    return render(request, 'citas/reservar_cita.html', {'form': form, 'fechas_ocupadas': fechas_ocupadas})
-
+    return render(request, 'citas/reservar_cita.html', {
+        'form': form,
+        'fechas_ocupadas': fechas_ocupadas,
+        'horas_ocupadas_por_fecha': horas_ocupadas_por_fecha
+    })
 
 @login_required
 @handle_exceptions
@@ -96,7 +117,7 @@ def ver_citas(request):
 @handle_exceptions
 def editar_cita(request, cita_id):
     cita = get_object_or_404(Cita, id=cita_id, usuario=request.user)
-
+    
     # Verifica caducidad cita
     if cita.fecha < timezone.now():
         messages.error(request, 'No puedes editar una cita que ya ha finalizado.')
@@ -105,31 +126,46 @@ def editar_cita(request, cita_id):
     # Obtener fechas con horas completamente ocupadas
     horas_por_dia = Cita.objects.values('fecha__date').annotate(total_citas=Count('hora')).filter(total_citas=len(CitaForm.HORA_CHOICES))
     fechas_ocupadas = [entry['fecha__date'].isoformat() for entry in horas_por_dia]
-
+    
+    # Crear un diccionario para almacenar las horas ocupadas para cada fecha
+    horas_ocupadas_por_fecha = {}
+    citas = Cita.objects.all()
+    for cita_existente in citas:
+        fecha_str = cita_existente.fecha.date().isoformat()
+        if fecha_str not in horas_ocupadas_por_fecha:
+            horas_ocupadas_por_fecha[fecha_str] = []
+        horas_ocupadas_por_fecha[fecha_str].append(cita_existente.fecha.strftime("%H:%M"))
+    
     if request.method == 'POST':
         form = CitaForm(request.POST, instance=cita)
         if form.is_valid():
             fecha = form.cleaned_data['fecha']
             hora = form.cleaned_data['hora']
             fecha_hora = datetime.combine(fecha, hora)
-
-            # Convertir a timezone-aware si USE_TZ está habilitado
             if timezone.is_naive(fecha_hora):
                 fecha_hora = timezone.make_aware(fecha_hora, timezone.get_current_timezone())
             
-            cita.fecha = fecha_hora
-            cita.hora = hora
-            form.save()
-
-            # Enviar notificación de modificación de cita
-            enviar_notificacion_modificacion_cita(request.user.email, cita)
-            
-            messages.success(request, '¡Cita actualizada con éxito!')
-            return redirect('citas:ver_citas')
+            # Verificar si existe una cita en la nueva fecha/hora (excluyendo la cita actual)
+            if Cita.objects.filter(fecha=fecha_hora).exclude(id=cita_id).exists():
+                form.add_error(None, "Ya existe una cita reservada en esa fecha y hora.")
+            else:
+                cita.fecha = fecha_hora
+                cita.hora = hora
+                form.save()
+                
+                # Enviar notificación de modificación de cita
+                enviar_notificacion_modificacion_cita(request.user.email, cita)
+                
+                messages.success(request, '¡Cita actualizada con éxito!')
+                return redirect('citas:ver_citas')
     else:
         form = CitaForm(instance=cita)
     
-    return render(request, 'citas/editar_cita.html', {'form': form, 'fechas_ocupadas': fechas_ocupadas})
+    return render(request, 'citas/editar_cita.html', {
+        'form': form,
+        'fechas_ocupadas': fechas_ocupadas,
+        'horas_ocupadas_por_fecha': horas_ocupadas_por_fecha,
+    })
 
 
 

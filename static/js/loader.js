@@ -1,26 +1,24 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
     const loader = document.getElementById('loader');
 
-    function showLoader() {
+    const showLoader = () => {
         loader.style.display = 'block';
-    }
+    };
 
-    function hideLoader() {
+    const hideLoader = () => {
         loader.style.display = 'none';
-    }
+    };
 
     // Mostrar el loader al enviar un formulario
-    const forms = document.querySelectorAll('form');
-    forms.forEach(function(form) {
-        form.addEventListener('submit', function() {
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', () => {
             showLoader();
         });
     });
 
     // Mostrar el loader al hacer clic en un enlace que cargue otra vista
-    const links = document.querySelectorAll('a');
-    links.forEach(function(link) {
-        link.addEventListener('click', function(event) {
+    document.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', event => {
             const href = link.getAttribute('href');
             if (href && !href.startsWith('#') && !link.hasAttribute('download')) {
                 showLoader();
@@ -29,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Ocultar el loader cuando la página ha terminado de cargar
-    window.addEventListener('load', function() {
+    window.addEventListener('load', () => {
         hideLoader();
     });
 });
