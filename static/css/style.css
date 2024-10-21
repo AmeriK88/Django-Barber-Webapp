@@ -34,7 +34,7 @@ body {
     background-color: var(--background-color);
 }
 
-/* Header */
+/* Header & nav */
 header {
     background-color: var(--header-background);
     color: var(--secondary-color);
@@ -69,6 +69,30 @@ nav ul li a.active {
     background-color: var(--link-hover-background);
     border-radius: 5px;
 }
+
+/* Hero section */
+.hero-content {
+    opacity: 0; 
+    transform: translateY(20px); 
+    transition: opacity 0.5s ease, transform 0.5s ease; 
+}
+
+.hero-content.visible {
+    opacity: 1; 
+    transform: translateY(0); 
+}
+
+.hero-image {
+    opacity: 0; 
+    transform: scale(0.6); 
+    transition: opacity 0.5s ease, transform 0.5s ease; 
+}
+
+.hero-image.visible {
+    opacity: 1; 
+    transform: scale(1); 
+}
+
 
 /* Main Content */
 main {
@@ -130,7 +154,6 @@ li {
 }
 
 /* Template titles */
-
 .main-title {
     font-size: 2rem; 
     font-weight: 600;
