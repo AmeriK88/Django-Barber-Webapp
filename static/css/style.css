@@ -2,17 +2,24 @@
 :root {
     --font-family: 'Roboto', sans-serif;
     --title-font-family: 'Great Vibes', cursive;
-    --primary-color: #2e2e2e;
-    --secondary-color: #fff;
-    --background-color: #c3c5b8;
-    --header-background: #2e2e2e;
-    --link-color: #fff;
-    --link-hover-background: #444;
-    --form-background: #a39c9c;
-    --border-color: #ddd;
-    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Sombra más pronunciada */
-    --error-color: #dc3545;
-    --spinner-color: #3498db;
+    --primary-color: #2e2e2e; /* Color primario de texto */
+    --secondary-color: #fff; /* Color secundario de texto */
+    --background-color: #c3c5b8; /* Color de fondo general */
+    --header-background: #2e2e2e; /* Fondo del encabezado */
+    --link-color: #fff; /* Color de enlaces */
+    --link-hover-background: #444; /* Fondo de enlace en hover */
+    --form-background: #a39c9c; /* Fondo del formulario */
+    --border-color: #ddd; /* Color del borde */
+    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Sombra de las tarjetas */
+    --error-color: #dc3545; /* Color de error */
+    --spinner-color: #3498db; /* Color del spinner */
+    
+    /* Colores adicionales */
+    --success-color: #28a745; /* Color para mensajes de éxito */
+    --info-color: #17a2b8; /* Color para mensajes informativos */
+    --warning-color: #ffc107; /* Color para advertencias */
+    --muted-color: #6c757d; /* Color para texto atenuado */
+    --light-background: #f8f9fa; /* Fondo claro para secciones */
 }
 
 /* General Styles */
@@ -157,7 +164,7 @@ img {
     height: auto;
     border: 1px solid var(--border-color);
     padding: 5px;
-    background: #f9f9f9;
+    background: var(--light-background); /* Utilizar color de fondo claro */
     transition: transform 0.3s ease; /* Transición en imagen */
 }
 
@@ -310,17 +317,10 @@ li {
     height: 60px;
     margin-left: -30px;
     margin-top: -30px;
-    border: 8px solid #f3f3f3;
-    border-radius: 50%;
+    border: 8px solid var(--border-color);
     border-top: 8px solid var(--spinner-color);
+    border-radius: 50%;
     animation: spin 1s linear infinite;
-    opacity: 0; /* Oculto inicialmente */
-    transition: opacity 0.3s ease; /* Transición al mostrar */
-}
-
-#loader.visible {
-    display: block;
-    opacity: 1; /* Mostrar suavemente */
 }
 
 @keyframes spin {
