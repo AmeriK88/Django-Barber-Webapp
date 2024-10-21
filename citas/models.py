@@ -37,6 +37,7 @@ class Cita(models.Model):
     fecha = models.DateTimeField()  
     hora = models.TimeField()  
     comentario = models.TextField(blank=True, null=True)
+    vista = models.BooleanField(default=False)  
 
     def __str__(self):
         return f'Cita para {self.usuario} el {self.fecha.date()} a las {self.hora}'
@@ -44,6 +45,7 @@ class Cita(models.Model):
     def puede_cancelar(self):
         limite_cancelacion = self.fecha - timezone.timedelta(days=1)
         return timezone.now() < limite_cancelacion
+
     
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
