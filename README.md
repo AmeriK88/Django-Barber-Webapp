@@ -122,5 +122,15 @@ Ejecuta generate_qr.py - asegúrate de incluir la url de tu sitio.
 
 
 ## Imágenes
+![Captura de pantalla 2024-10-22 014034](https://github.com/user-attachments/assets/e59f1c83-3186-424c-84f3-0654aeb7a2fa)
+![Captura de pantalla 2024-10-22 014024](https://github.com/user-attachments/assets/9389641e-8ccc-4b46-8003-42f5c71f8c2d)
+![Captura de pantalla 2024-10-22 013824](https://github.com/user-attachments/assets/3f1212e5-f9d7-4133-8d98-cc971bdb5105)
+![Captura de pantalla 2024-10-22 013652](https://github.com/user-attachments/assets/d95e5686-32b9-4a89-8144-2a64d559d87b)
+![Captura de pantalla 2024-10-22 013628 - copia](https://github.com/user-attachments/assets/cb8472dd-a0b9-4c1d-8fe1-79b12d77dcb9)
+![Captura de pantalla 2024-10-22 013556 - copia](https://github.com/user-attachments/assets/0881b02f-4559-4194-8efa-5081dbc04655)
+![Captura de pantalla 2024-10-22 013522 - copia](https://github.com/user-attachments/assets/8cc1de64-f7bf-4dba-8fa4-18edc7a54c2f)
+![Captura de pantalla 2024-10-22 013514](https://github.com/user-attachments/assets/82a70623-1354-4bf3-8596-780f356ee663)
+![Captura de pantalla 2024-10-22 014054](https://github.com/user-attachments/assets/60703ad3-c82c-42d5-841c-16753b6c4b43)
+
 
 
