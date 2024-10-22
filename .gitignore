@@ -25,5 +25,4 @@ media/
 
 # Imagen Qrgit log
 registro_qr.png
-
-*.generate_qr.py
+generate_qr.py
