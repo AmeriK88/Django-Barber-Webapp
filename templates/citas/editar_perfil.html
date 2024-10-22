@@ -10,7 +10,7 @@
             <p class="text-muted mb-4 text-center">Actualiza tu información personal aquí. Todos los campos son opcionales, pero te recomendamos que mantengas tu perfil actualizado.</p>
 
             {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">
+                <div class="alert alert-{{ message.tags }} text-center">
                     {{ message }}
                 </div>
             {% endfor %}
