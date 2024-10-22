@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container mt-5 mb-5">
     <div class="card shadow bg-light">
-        <div class="card-header text-center bg-secondary main-title">
+        <div class="card-header text-center main-title">
             <h2>Editar Perfil</h2>
         </div>
         <div class="card-body">
@@ -17,10 +17,10 @@
 
             <!-- Información actual del usuario -->
             <div class="card mx-auto mb-5 rounded-3 col-12 col-sm-8 col-md-6 col-lg-4" style="max-width: 100%;">
-                <div class="card-header bg-secondary text-light">
+                <div class="card-header main-title ">
                     Información del Usuario
                 </div>
-                <div class="card-body bg-info bg-gradient">
+                <div class="card-body">
                     <p class="card-text"><strong>Nombre de Usuario:</strong> {{ username }}</p>
                     <p class="card-text"><strong>Correo Electrónico:</strong> {{ current_email }}</p>
                     <p class="card-text"><strong>Teléfono Actual:</strong> {{ current_phone }}</p>

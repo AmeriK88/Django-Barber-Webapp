@@ -2,25 +2,28 @@
 :root {
     --font-family: 'Roboto', sans-serif;
     --title-font-family: 'Great Vibes', cursive;
-    --primary-color: #2e2e2e; /* Color primario de texto */
-    --secondary-color: #fff; /* Color secundario de texto */
-    --background-color: #c3c5b8; /* Color de fondo general */
-    --header-background: #2e2e2e; /* Fondo del encabezado */
-    --link-color: #fff; /* Color de enlaces */
-    --link-hover-background: #444; /* Fondo de enlace en hover */
-    --form-background: #a39c9c; /* Fondo del formulario */
-    --border-color: #ddd; /* Color del borde */
-    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Sombra de las tarjetas */
-    --error-color: #dc3545; /* Color de error */
-    --spinner-color: #3498db; /* Color del spinner */
-    
-    /* Colores adicionales */
-    --success-color: #28a745; /* Color para mensajes de éxito */
-    --info-color: #17a2b8; /* Color para mensajes informativos */
-    --warning-color: #ffc107; /* Color para advertencias */
-    --muted-color: #6c757d; /* Color para texto atenuado */
-    --light-background: #f8f9fa; /* Fondo claro para secciones */
+    --primary-color: #3B2C29;
+    --secondary-color: #FAF9F6; 
+    --background-color: #EFEAD8; 
+    --header-background: #3B2C29; 
+    --link-color: #FAF9F6; 
+    --link-hover-background: #BA9A78; 
+    --form-background: #c4a68a; 
+    --border-color: #BFAFA2; 
+    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); 
+    --error-color: #D9534F; 
+    --error-background: #F8D7DA;
+    --error-text-color: #721c24; 
+    --spinner-color: #F39C12;
+    --success-color: #5CB85C; 
+    --info-color: #5BC0DE; 
+    --warning-color: #F0AD4E; 
+    --muted-color: #AAB2B4; 
+    --light-background: #F9F9F9; 
+    --border-error-color: #E6B8B7; /
 }
+
+
 
 /* General Styles */
 html, body {
@@ -47,7 +50,7 @@ header {
     color: var(--secondary-color);
     padding: 1rem;
     text-align: center;
-    box-shadow: var(--card-shadow); /* Sombra en el header */
+    box-shadow: var(--card-shadow);
 }
 
 h1 > .title-font {
@@ -69,14 +72,14 @@ nav ul li a {
     color: var(--link-color);
     text-decoration: none;
     padding: 10px;
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Transición en el hover */
+    transition: background-color 0.3s ease, transform 0.2s ease; 
 }
 
 nav ul li a:hover,
 nav ul li a.active {
     background-color: var(--link-hover-background);
     border-radius: 5px;
-    transform: scale(1.05); /* Efecto de escalado en el hover */
+    transform: scale(1.05);
 }
 
 /* Hero section */
@@ -120,11 +123,11 @@ form {
     background-color: var(--form-background);
     border-radius: 12px;
     box-shadow: var(--card-shadow);
-    transition: transform 0.3s ease; /* Transición suave en el formulario */
+    transition: transform 0.3s ease; 
 }
 
 form:hover {
-    transform: translateY(-5px); /* Levantar el formulario al hacer hover */
+    transform: translateY(-5px); 
 }
 
 form input,
@@ -134,23 +137,23 @@ form textarea {
     margin-bottom: 15px;
     border: 1px solid var(--border-color);
     border-radius: 5px;
-    transition: border-color 0.3s ease; /* Transición en el borde */
+    transition: border-color 0.3s ease; 
 }
 
 form input:focus,
 form textarea:focus {
-    border-color: var(--primary-color); /* Cambiar color del borde al enfocarse */
+    border-color: var(--primary-color);
 }
 
 form button {
     width: 100%;
     padding: 10px;
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Transición en botón */
+    transition: background-color 0.3s ease, transform 0.2s ease; 
 }
 
 form button:hover {
-    background-color: var(--link-hover-background); /* Color de fondo en hover */
-    transform: scale(1.05); /* Efecto de escalado en el hover */
+    background-color: var(--link-hover-background); 
+    transform: scale(1.05); 
 }
 
 .form-check-inline {
@@ -164,12 +167,12 @@ img {
     height: auto;
     border: 1px solid var(--border-color);
     padding: 5px;
-    background: var(--light-background); /* Utilizar color de fondo claro */
-    transition: transform 0.3s ease; /* Transición en imagen */
+    background: var(--light-background); 
+    transition: transform 0.3s ease; 
 }
 
 img:hover {
-    transform: scale(1.05); /* Efecto de escalado al hacer hover */
+    transform: scale(1.05); 
 }
 
 /* List Styles */
@@ -206,11 +209,11 @@ li {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    transition: transform 0.3s ease; /* Transición suave para tarjetas */
+    transition: transform 0.3s ease; 
 }
 
 .card:hover {
-    transform: translateY(-5px); /* Levantar la tarjeta al hacer hover */
+    transform: translateY(-5px); 
 }
 
 .card img,
@@ -218,12 +221,12 @@ li {
     height: 200px;
     object-fit: cover;
     width: 100%;
-    transition: transform 0.3s ease; /* Transición en imagen de la tarjeta */
+    transition: transform 0.3s ease; 
 }
 
 .card img:hover,
 .card-user-profile img:hover {
-    transform: scale(1.1); /* Efecto de escalado en hover */
+    transform: scale(1.1); 
 }
 
 .card-body,
@@ -260,11 +263,11 @@ li {
     padding: 16px;
     box-shadow: var(--card-shadow);
     width: calc(33.333% - 16px);
-    transition: transform 0.3s ease; /* Transición suave para cita */
+    transition: transform 0.3s ease;
 }
 
 .cita-card:hover {
-    transform: translateY(-5px); /* Levantar la cita al hacer hover */
+    transform: translateY(-5px); 
 }
 
 .cita-card h4 {
@@ -285,8 +288,8 @@ li {
 /* Error Styles */
 .is-invalid {
     border-color: var(--error-color);
-    background-color: #f8d7da;
-    color: #721c24; 
+    background-color: var(--error-background);
+    color: var(--error-text-color); 
 }
 
 .invalid-feedback {
@@ -295,9 +298,9 @@ li {
 }
 
 .alert-error {
-    background-color: #f8d7da; 
-    color: #721c24; 
-    border-color: #f5c6cb; 
+    background-color: var(--error-background); 
+    color: var(--error-text-color); 
+    border-color: var(--border-error-color); 
     padding: 15px; 
     margin-bottom: 20px; 
     border-radius: 5px; 
@@ -317,10 +320,17 @@ li {
     height: 60px;
     margin-left: -30px;
     margin-top: -30px;
-    border: 8px solid var(--border-color);
-    border-top: 8px solid var(--spinner-color);
+    border: 8px solid #f3f3f3;
     border-radius: 50%;
+    border-top: 8px solid var(--spinner-color);
     animation: spin 1s linear infinite;
+    opacity: 0; 
+    transition: opacity 0.3s ease; 
+}
+
+#loader.visible {
+    display: block;
+    opacity: 1; 
 }
 
 @keyframes spin {
@@ -336,3 +346,79 @@ footer {
     padding: 1rem;
     flex-shrink: 0;
 }
+
+/* Sobrescribir colores de Bootstrap */
+.navbar-dark .navbar-nav .nav-link {
+    color: var(--link-color); 
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: var(--link-hover-background); 
+    background-color: var(--secondary-color); 
+}
+
+.navbar-dark .navbar-brand {
+    color: var(--link-color); 
+}
+
+.navbar-dark .navbar-brand:hover {
+    color: var(--link-hover-background); 
+}
+
+/* Botones */
+.btn-primary {
+    background-color: var(--primary-color); 
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--link-hover-background);
+}
+
+/* Footer */
+footer {
+    background-color: var(--primary-color); 
+}
+
+footer a {
+    color: var(--link-color); 
+}
+
+footer a:hover {
+    color: var(--link-hover-background); 
+}
+
+/* Mensajes de error */
+.alert {
+    border-radius: 0.25rem;
+}
+
+/* Alertas de error */
+.alert-danger {
+    background-color: var(--error-background);
+    color: var(--error-text-color);
+}
+
+/* Alertas de éxito */
+.alert-success {
+    background-color: var(--success-color);
+    color: var(--secondary-color);
+}
+
+/* Alertas de información */
+.alert-info {
+    background-color: var(--info-color);
+    color: var(--secondary-color);
+}
+
+/* Alertas de advertencia */
+.alert-warning {
+    background-color: var(--warning-color);
+    color: var(--secondary-color);
+}
+
+/* Spinner */
+.spinner-border {
+    color: var(--spinner-color);
+}
+
