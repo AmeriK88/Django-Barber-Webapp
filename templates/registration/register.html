@@ -9,7 +9,7 @@
     {% csrf_token %}
     
     {% if form.errors %}
-        <div class="alert alert-danger">
+        <div class="alert alert-error">
             <ul>
             {% for field in form %}
                 {% for error in field.errors %}

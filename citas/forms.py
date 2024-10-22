@@ -33,11 +33,11 @@ class CitaForm(forms.ModelForm):
     def clean_fecha(self):
         fecha = self.cleaned_data['fecha']
         if fecha.weekday() >= 5:
-            raise forms.ValidationError("No se pueden seleccionar citas para fines de semana.")
+            raise forms.ValidationError("¡Puntalillo! Te recuerdo que el finde no curro.")
         today = timezone.now().date() 
 
         if fecha.date() < today:
-            raise forms.ValidationError("La fecha de la cita no puede ser en el pasado.")
+            raise forms.ValidationError("¡Ñooosss! ¡Se te fue el baifo! La fecha ya pasó.")
         return fecha
 
     def clean_hora(self):
@@ -58,7 +58,7 @@ class CitaForm(forms.ModelForm):
             if timezone.is_naive(fecha_hora):
                 fecha_hora = timezone.make_aware(fecha_hora, timezone.get_current_timezone())
             if Cita.objects.filter(fecha=fecha_hora).exclude(id=cita_id).exists():
-                raise forms.ValidationError("Ya existe una cita reservada en esa fecha y hora.")
+                raise forms.ValidationError("¡Lo siento viejito! Hora ocupada.")
         return cleaned_data
 
 
@@ -84,7 +84,7 @@ class CustomUserCreationForm(UserCreationForm):
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if User.objects.filter(email=email).exists():
-            raise forms.ValidationError("Este correo electrónico ya está registrado.")
+            raise forms.ValidationError("Este correo electrónico ya está registrado puntal.")
         return email
 
     def clean_password2(self):

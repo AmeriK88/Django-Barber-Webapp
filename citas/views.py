@@ -1,15 +1,18 @@
+from datetime import datetime
+from django.utils import timezone
 from django.contrib.auth import logout as auth_logout, login as auth_login, authenticate, update_session_auth_hash
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from datetime import datetime
-from django.utils import timezone
+from django.db.models import Count
+
 from .models import Servicio, Resena, Imagen, Cita, UserProfile
 from .forms import CitaForm, ResenaForm, CustomUserCreationForm, UserProfileForm, UserForm
-from .utils import enviar_confirmacion_cita, enviar_notificacion_modificacion_cita, enviar_notificacion_eliminacion_cita
+from .utils import (enviar_confirmacion_cita, 
+                    enviar_notificacion_modificacion_cita, 
+                    enviar_notificacion_eliminacion_cita)
 from .decorators import handle_exceptions
-from django.db.models import Count
 
 def home(request):
     return render(request, 'citas/home.html')
@@ -24,15 +27,10 @@ def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
-            if user:
-                auth_login(request, user)
-                messages.success(request, f'¡Bienvenido a Ca\'Bigote, {username}! Tu cuenta ha sido creada con éxito.')
-
-                return redirect('citas:perfil_usuario')
+            user = form.save()
+            auth_login(request, user)
+            messages.success(request, f'¡Bienvenido a Ca\'Bigote, {user.username}! Cuenta creada.')
+            return redirect('citas:perfil_usuario')
     else:
         form = CustomUserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
@@ -44,47 +42,27 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             auth_login(request, user)
-            messages.success(request, f'Bienvenido de nuevo, {user.username}!')
-
+            messages.success(request, f'¡Viejito! Bienvenido de nuevo, {user.username}!')
             return redirect('citas:perfil_usuario')
     else:
         form = AuthenticationForm()
     return render(request, 'registration/login.html', {'form': form})
 
-from django.utils import timezone
-from django.db.models import Count
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from .forms import CitaForm
-from .models import Cita
-from .utils import enviar_confirmacion_cita
-from datetime import datetime
-
 @login_required
 @handle_exceptions
 def reservar_cita(request):
-    # Obtener fechas ocupadas y convertirlas a formato ISO para JavaScript
     horas_por_dia = Cita.objects.values('fecha__date').annotate(total_citas=Count('hora')).filter(total_citas=len(CitaForm.HORA_CHOICES))
     fechas_ocupadas = [entry['fecha__date'].isoformat() for entry in horas_por_dia]
-
-    # Crear un diccionario para almacenar las horas ocupadas para cada fecha
-    horas_ocupadas_por_fecha = {}
-    citas = Cita.objects.all()
-    for cita in citas:
-        fecha_str = cita.fecha.date().isoformat()
-        if fecha_str not in horas_ocupadas_por_fecha:
-            horas_ocupadas_por_fecha[fecha_str] = []
-        horas_ocupadas_por_fecha[fecha_str].append(cita.fecha.strftime("%H:%M"))
+    horas_ocupadas_por_fecha = {cita.fecha.date().isoformat(): [] for cita in Cita.objects.all()}
+    for cita in Cita.objects.all():
+        horas_ocupadas_por_fecha[cita.fecha.date().isoformat()].append(cita.fecha.strftime("%H:%M"))
 
     if request.method == 'POST':
         form = CitaForm(request.POST)
         if form.is_valid():
             fecha = form.cleaned_data['fecha']
             hora = form.cleaned_data['hora']
-            fecha_hora = datetime.combine(fecha, hora)
-
-            if timezone.is_naive(fecha_hora):
-                fecha_hora = timezone.make_aware(fecha_hora, timezone.get_current_timezone())
+            fecha_hora = timezone.make_aware(datetime.combine(fecha, hora)) if timezone.is_naive(datetime.combine(fecha, hora)) else datetime.combine(fecha, hora)
 
             if Cita.objects.filter(fecha=fecha_hora).exists():
                 form.add_error(None, "Ya existe una cita reservada en esa fecha y hora.")
@@ -94,7 +72,7 @@ def reservar_cita(request):
                 cita.fecha = fecha_hora
                 cita.save()
                 enviar_confirmacion_cita(request.user.email, cita)
-                messages.success(request, '¡Cita reservada con éxito!')
+                messages.success(request, '¡Viejito! Ya tienes tu cita.')
                 return redirect('citas:perfil_usuario')
     else:
         form = CitaForm()
@@ -112,51 +90,35 @@ def ver_citas(request):
     citas_pasadas = Cita.objects.filter(usuario=request.user, fecha__lt=timezone.now()) 
     return render(request, 'citas/ver_citas.html', {'citas_activas': citas_activas, 'citas_pasadas': citas_pasadas})
 
-
 @login_required
 @handle_exceptions
 def editar_cita(request, cita_id):
     cita = get_object_or_404(Cita, id=cita_id, usuario=request.user)
     
-    # Verifica caducidad cita
     if cita.fecha < timezone.now():
-        messages.error(request, 'No puedes editar una cita que ya ha finalizado.')
+        messages.error(request, '¡Ñooosss! ¡Se te fue el baifo! La fecha ya pasó.')
         return redirect('citas:ver_citas')
     
-    # Obtener fechas con horas completamente ocupadas
     horas_por_dia = Cita.objects.values('fecha__date').annotate(total_citas=Count('hora')).filter(total_citas=len(CitaForm.HORA_CHOICES))
     fechas_ocupadas = [entry['fecha__date'].isoformat() for entry in horas_por_dia]
-    
-    # Crear un diccionario para almacenar las horas ocupadas para cada fecha
-    horas_ocupadas_por_fecha = {}
-    citas = Cita.objects.all()
-    for cita_existente in citas:
-        fecha_str = cita_existente.fecha.date().isoformat()
-        if fecha_str not in horas_ocupadas_por_fecha:
-            horas_ocupadas_por_fecha[fecha_str] = []
-        horas_ocupadas_por_fecha[fecha_str].append(cita_existente.fecha.strftime("%H:%M"))
-    
+    horas_ocupadas_por_fecha = {cita_existente.fecha.date().isoformat(): [] for cita_existente in Cita.objects.all()}
+    for cita_existente in Cita.objects.all():
+        horas_ocupadas_por_fecha[cita_existente.fecha.date().isoformat()].append(cita_existente.fecha.strftime("%H:%M"))
+
     if request.method == 'POST':
         form = CitaForm(request.POST, instance=cita)
         if form.is_valid():
             fecha = form.cleaned_data['fecha']
             hora = form.cleaned_data['hora']
-            fecha_hora = datetime.combine(fecha, hora)
-            if timezone.is_naive(fecha_hora):
-                fecha_hora = timezone.make_aware(fecha_hora, timezone.get_current_timezone())
-            
-            # Verificar si existe una cita en la nueva fecha/hora (excluyendo la cita actual)
+            fecha_hora = timezone.make_aware(datetime.combine(fecha, hora)) if timezone.is_naive(datetime.combine(fecha, hora)) else datetime.combine(fecha, hora)
+
             if Cita.objects.filter(fecha=fecha_hora).exclude(id=cita_id).exists():
                 form.add_error(None, "Ya existe una cita reservada en esa fecha y hora.")
             else:
                 cita.fecha = fecha_hora
-                cita.hora = hora
                 form.save()
-                
-                # Enviar notificación de modificación de cita
                 enviar_notificacion_modificacion_cita(request.user.email, cita)
-                
-                messages.success(request, '¡Cita actualizada con éxito!')
+                messages.success(request, '¡Eres un puntal! Actualizaste tu cita.')
                 return redirect('citas:ver_citas')
     else:
         form = CitaForm(instance=cita)
@@ -167,8 +129,6 @@ def editar_cita(request, cita_id):
         'horas_ocupadas_por_fecha': horas_ocupadas_por_fecha,
     })
 
-
-
 @login_required
 @handle_exceptions
 def eliminar_cita(request, cita_id):
@@ -177,11 +137,10 @@ def eliminar_cita(request, cita_id):
     if not cita.puede_cancelar():
         return render(request, 'citas/eliminar_cita.html', {
             'cita': cita,
-            'error_message': "No puedes cancelar la cita menos de 24 horas antes."
+            'error_message': "¡Mi niño! No puedes cancelar citas con 24hrs de antelación."
         })
 
     if request.method == 'POST':
-        # Guardar detalles de la cita antes de eliminarla para enviar el correo
         cita_detalle = {
             'email': request.user.email,
             'servicio': cita.servicio.nombre,
@@ -190,58 +149,43 @@ def eliminar_cita(request, cita_id):
         }
         
         cita.delete()
-
-        # Enviar notificación de eliminación de cita con los detalles guardados
         enviar_notificacion_eliminacion_cita(cita_detalle['email'], cita_detalle)
-        
-        messages.success(request, "La cita ha sido cancelada.")
+        messages.success(request, "¡Fuerte loco! Has cancelado tu cita.")
         return redirect('citas:ver_citas')
 
     return render(request, 'citas/eliminar_cita.html', {'cita': cita})
-    
 
 @login_required
 @handle_exceptions
 def logout_view(request):
     username = request.user.username
     auth_logout(request)
-    messages.success(request, f'¡Hasta pronto, {username}!')
+    messages.success(request, f'¡Nos vemos, {username}, vuelve pronto puntalillo!')
     return redirect('citas:home')
 
 @handle_exceptions
 def ver_resenas(request):
-    form = None
-    if request.user.is_authenticated:
-        if request.method == 'POST':
-            form = ResenaForm(request.POST)
-            if form.is_valid():
-                resena = form.save(commit=False)
-                resena.usuario = request.user
-                resena.save()
-                return redirect('citas:resenas')
-        else:
-            form = ResenaForm()
+    form = ResenaForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        resena = form.save(commit=False)
+        resena.usuario = request.user
+        resena.save()
+        return redirect('citas:resenas')
+    
     resenas = Resena.objects.all()
     estrellas = list(range(1, 6))
-    context = {
-        'form': form,
-        'resenas': resenas,
-        'estrellas': estrellas
-    }
-    return render(request, 'citas/resenas.html', context)
+    return render(request, 'citas/resenas.html', {'form': form, 'resenas': resenas, 'estrellas': estrellas})
 
 @login_required
 @handle_exceptions
 def agregar_resena(request):
-    if request.method == 'POST':
-        form = ResenaForm(request.POST)
-        if form.is_valid():
-            resena = form.save(commit=False)
-            resena.usuario = request.user
-            resena.save()
-            return redirect('citas:resenas')
-    else:
-        form = ResenaForm()
+    form = ResenaForm(request.POST or None)
+    if form.is_valid():
+        resena = form.save(commit=False)
+        resena.usuario = request.user
+        resena.save()
+        return redirect('citas:resenas')
+
     return render(request, 'citas/agregar_resena.html', {'form': form})
 
 @handle_exceptions
@@ -260,7 +204,6 @@ def perfil_usuario(request):
     citas_activas = Cita.objects.filter(usuario=request.user, fecha__gte=timezone.now()) 
     return render(request, 'citas/perfil_usuario.html', {'citas': citas_activas})
 
-
 @login_required
 @handle_exceptions
 def editar_perfil_usuario(request):
@@ -276,11 +219,11 @@ def editar_perfil_usuario(request):
             profile_form.save()
             password_form.save()
             update_session_auth_hash(request, request.user)  
-            messages.success(request, 'Tu perfil ha sido actualizado exitosamente.')
+            messages.success(request, '¡Esa es niñote! Tu perfil ha sido actualizado.')
             return redirect('citas:editar_perfil_usuario')
         else:
             if not password_form.is_valid():
-                messages.error(request, 'Hubo un problema con la actualización de la contraseña. Por favor, corrige los errores indicados.')
+                messages.error(request, 'Tú o el servidor están en la parra. Prueba de nuevo puntalillo.')
     else:
         profile_form = UserProfileForm(instance=user_profile)
         user_form = UserForm(instance=request.user)
@@ -296,4 +239,3 @@ def editar_perfil_usuario(request):
     }
 
     return render(request, 'citas/editar_perfil.html', context)
-

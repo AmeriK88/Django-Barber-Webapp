@@ -7,9 +7,9 @@
     --background-color: #EFEAD8; 
     --header-background: #3B2C29; 
     --link-color: #FAF9F6; 
-    --link-hover-background: #BA9A78; 
+    --link-hover-background: #8b8069; 
     --form-background: #c4a68a; 
-    --border-color: #BFAFA2; 
+    --border-color: #a3978c; 
     --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); 
     --error-color: #D9534F; 
     --error-background: #F8D7DA;
@@ -22,7 +22,6 @@
     --light-background: #F9F9F9; 
     --border-error-color: #E6B8B7; /
 }
-
 
 
 /* General Styles */
@@ -285,30 +284,6 @@ li {
     transform: scale(1.1);
 }
 
-/* Error Styles */
-.is-invalid {
-    border-color: var(--error-color);
-    background-color: var(--error-background);
-    color: var(--error-text-color); 
-}
-
-.invalid-feedback {
-    color: var(--error-color);
-    font-weight: bold;
-}
-
-.alert-error {
-    background-color: var(--error-background); 
-    color: var(--error-text-color); 
-    border-color: var(--border-error-color); 
-    padding: 15px; 
-    margin-bottom: 20px; 
-    border-radius: 5px; 
-    font-size: 16px; 
-    font-weight: bold; 
-    text-align: center; 
-}
-
 /* Spinner */
 #loader {
     display: none;
@@ -388,36 +363,55 @@ footer a:hover {
     color: var(--link-hover-background); 
 }
 
-/* Mensajes de error */
+
+/* Error Styles */
+.is-invalid {
+    border-color: var(--error-color);
+    background-color: var(--error-background);
+    color: var(--error-text-color); 
+}
+
+.invalid-feedback {
+    color: var(--error-color);
+    font-weight: bold;
+}
+
+.alert-error {
+    background-color: var(--error-background); 
+    color: var(--error-text-color); 
+    border-color: var(--border-error-color); 
+    padding: 15px; 
+    margin-bottom: 20px; 
+    border-radius: 5px; 
+    font-size: 16px; 
+    font-weight: bold; 
+    text-align: center; 
+}
+
 .alert {
     border-radius: 0.25rem;
 }
 
-/* Alertas de error */
 .alert-danger {
     background-color: var(--error-background);
     color: var(--error-text-color);
 }
 
-/* Alertas de éxito */
 .alert-success {
     background-color: var(--success-color);
     color: var(--secondary-color);
 }
 
-/* Alertas de información */
 .alert-info {
     background-color: var(--info-color);
     color: var(--secondary-color);
 }
 
-/* Alertas de advertencia */
 .alert-warning {
     background-color: var(--warning-color);
     color: var(--secondary-color);
 }
 
-/* Spinner */
 .spinner-border {
     color: var(--spinner-color);
 }
