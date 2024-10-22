@@ -1,7 +1,12 @@
 import qrcode
+import os
+from dotenv import load_dotenv
+
+# Cargar las variables de entorno del archivo .env
+load_dotenv()
 
 # URL a la que se redirigirá el código QR
-url = 'http://192.168.0.14:8000/register/' 
+url = os.getenv('QR_URL')
 
 # Crear una instancia del generador de QR
 qr = qrcode.QRCode(
