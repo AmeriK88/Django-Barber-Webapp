@@ -16,12 +16,10 @@ qr = qrcode.QRCode(
     border=4,
 )
 
-# Añadir la URL al QR
 qr.add_data(url)
 qr.make(fit=True)
 
 # Crear una imagen del QR
 img = qr.make_image(fill='black', back_color='white')
 
-# Guardar la imagen del QR
 img.save('registro_qr.png')
