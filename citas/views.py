@@ -19,8 +19,8 @@ def home(request):
 
 def servicios(request):
     servicios = Servicio.objects.all()
-    citas = Cita.objects.filter(usuario=request.user) if request.user.is_authenticated else None
-    return render(request, 'citas/servicios.html', {'servicios': servicios, 'citas': citas})
+    
+    return render(request, 'citas/servicios.html', {'servicios': servicios})
 
 @handle_exceptions
 def register(request):
