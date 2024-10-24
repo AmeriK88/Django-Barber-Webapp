@@ -48,17 +48,17 @@ class CitaForm(forms.ModelForm):
             raise forms.ValidationError("¡Se te fue el baifo! La hora está fuera del rango.")
         return hora
 
-    def clean(self):
-        cleaned_data = super().clean()
-        fecha = cleaned_data.get('fecha')
-        hora = cleaned_data.get('hora')
-        cita_id = self.instance.id
+    def clean_hora(self):
+        hora = self.cleaned_data.get('hora')
+        if not hora or hora == '':  # Evitar la opción vacía
+            raise forms.ValidationError("Por favor, selecciona una hora válida.")
+        
+        hora = datetime.strptime(hora, '%H:%M').time()
+        if hora < time(9, 30) or hora > time(19, 0):
+            raise forms.ValidationError("¡Se te fue el baifo! La hora está fuera del rango.")
+        return hora
 
-        if fecha and hora:
-            fecha_hora = datetime.combine(fecha, hora)
-            if Cita.objects.filter(fecha=fecha_hora).exclude(id=cita_id).exists():
-                self.add_error('hora', "¡Lo siento viejito! Hora ocupada.")
-        return cleaned_data
+
 
 class ResenaForm(forms.ModelForm):
     class Meta:

@@ -51,9 +51,11 @@ def login_view(request):
 @login_required
 @handle_exceptions
 def reservar_cita(request):
-    # Obtener fechas ocupadas y horas ocupadas por fecha
-    horas_por_dia = Cita.objects.values('fecha__date').annotate(total_citas=Count('hora')).filter(total_citas=len(CitaForm.HORA_CHOICES))
+    # Obtener fechas completamente reservadas
+    horas_por_dia = Cita.objects.values('fecha__date').annotate(total_citas=Count('hora')).filter(total_citas=len(CitaForm.HORA_CHOICES) - 1)  # Excluye la opción vacía
     fechas_ocupadas = [entry['fecha__date'].isoformat() for entry in horas_por_dia]
+    
+    # Construir el diccionario de horas ocupadas por fecha
     horas_ocupadas_por_fecha = {cita.fecha.date().isoformat(): [] for cita in Cita.objects.all()}
     for cita in Cita.objects.all():
         horas_ocupadas_por_fecha[cita.fecha.date().isoformat()].append(cita.fecha.strftime("%H:%M"))

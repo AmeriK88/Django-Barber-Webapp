@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const horasOcupadas = horasOcupadasPorFecha[selectedDate] || [];
 
         Array.from(inputHora.options).forEach(option => {
-            option.disabled = false;
+            option.disabled = false; 
         });
 
         // Deshabilitar las horas ocupadas
