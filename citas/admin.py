@@ -31,8 +31,8 @@ class ServicioAdmin(admin.ModelAdmin):
 
 @admin.register(Cita)
 class CitaAdmin(admin.ModelAdmin):
-    list_display = ('usuario', 'servicio', 'fecha', 'hora', 'comentario', 'vista')  # Añadir los campos 'hora', 'comentario', 'vista'
-    list_filter = ('vista', 'fecha')  # Añadir 'vista' a los filtros
+    list_display = ('usuario', 'servicio', 'fecha', 'hora', 'comentario', 'vista') 
+    list_filter = ('vista', 'fecha')  
     search_fields = ('usuario__username', 'servicio__nombre')  
 
 @admin.register(Resena)

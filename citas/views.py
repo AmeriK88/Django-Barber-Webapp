@@ -1,6 +1,6 @@
 from datetime import datetime
 from django.utils import timezone
-from django.contrib.auth import logout as auth_logout, login as auth_login, authenticate, update_session_auth_hash
+from django.contrib.auth import logout as auth_logout, login as auth_login, update_session_auth_hash
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
@@ -33,6 +33,7 @@ def register(request):
             return redirect('citas:perfil_usuario')
     else:
         form = CustomUserCreationForm()
+
     return render(request, 'registration/register.html', {'form': form})
 
 @handle_exceptions
@@ -42,11 +43,14 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             auth_login(request, user)
-            messages.success(request, f'¡Viejito! Bienvenido de nuevo, {user.username}!')
+            messages.success(request, f'¡¿Qué pasó loco?! Bienvenido de nuevo, {user.username}!')
             return redirect('citas:perfil_usuario')
+        else:
+            messages.error(request, '¡Eres un tolete! Nombre de usuario o contraseña incorrectos.')
     else:
         form = AuthenticationForm()
     return render(request, 'registration/login.html', {'form': form})
+
 
 @login_required
 @handle_exceptions
@@ -55,7 +59,7 @@ def reservar_cita(request):
     horas_por_dia = Cita.objects.values('fecha__date').annotate(total_citas=Count('hora')).filter(total_citas=len(CitaForm.HORA_CHOICES) - 1)  # Excluye la opción vacía
     fechas_ocupadas = [entry['fecha__date'].isoformat() for entry in horas_por_dia]
     
-    # Construir el diccionario de horas ocupadas por fecha
+    # Construye diccionario de horas ocupadas por fecha
     horas_ocupadas_por_fecha = {cita.fecha.date().isoformat(): [] for cita in Cita.objects.all()}
     for cita in Cita.objects.all():
         horas_ocupadas_por_fecha[cita.fecha.date().isoformat()].append(cita.fecha.strftime("%H:%M"))
@@ -219,7 +223,7 @@ def editar_perfil_usuario(request):
             return redirect('citas:editar_perfil_usuario')
         else:
             if not password_form.is_valid():
-                messages.error(request, 'Tú o el servidor están en la parra. Prueba de nuevo puntal.')
+                messages.error(request, '¡Ños! Tú o el servidor están en la parra. Prueba de nuevo puntal.')
     else:
         profile_form = UserProfileForm(instance=user_profile)
         user_form = UserForm(instance=request.user)

@@ -3,44 +3,59 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<div class="card bg-white text-center mb-5 mt-5">
-    <h2>Login</h2>
-</div>
+    <div class="card bg-white text-center mb-5 mt-5">
+        <h2>Login</h2>
+    </div>
 
-<form method="post">
-    {% csrf_token %}
-    
-    {% if form.non_field_errors %}
-    <div class="alert alert-error">
-        {{ form.non_field_errors }}
+    <!-- Mensaje -->
+    {% if messages %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6"> 
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} text-center">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
     {% endif %}
-    
-    <div class="{% if form.username.errors %}is-invalid{% endif %}">
-        {{ form.username.label_tag }}
-        {{ form.username }}
-        {% for error in form.username.errors %}
-        <div class="invalid-feedback">
-            {{ error }}
-        </div>
-        {% endfor %}
-    </div>
-    
-    <div class="{% if form.password.errors %}is-invalid{% endif %}">
-        {{ form.password.label_tag }}
-        {{ form.password }}
-        {% for error in form.password.errors %}
-        <div class="invalid-feedback">
-            {{ error }}
-        </div>
-        {% endfor %}
-    </div>
-    
-    <button type="submit" class="btn btn-primary">Login</button>
-</form>
 
-<div class="card bg-white text-center mt-3">
-    <p>¿No tienes cuenta? 👉 <a href="{% url 'citas:register' %}">Registrarse</a></p>
-    <p>¿Olvidaste tu contraseña? 👉 <a href="{% url 'password_reset' %}">Recuperar Contraseña</a></p>
-</div>
+    <form method="post">
+        {% csrf_token %}
+        
+        {% if form.non_field_errors %}
+        <div class="alert alert-error">
+            {{ form.non_field_errors }}
+        </div>
+        {% endif %}
+        
+        <div class="{% if form.username.errors %}is-invalid{% endif %}">
+            {{ form.username.label_tag }}
+            {{ form.username }}
+            {% for error in form.username.errors %}
+            <div class="invalid-feedback">
+                {{ error }}
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="{% if form.password.errors %}is-invalid{% endif %}">
+            {{ form.password.label_tag }}
+            {{ form.password }}
+            {% for error in form.password.errors %}
+            <div class="invalid-feedback">
+                {{ error }}
+            </div>
+            {% endfor %}
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+
+    <div class="card bg-white text-center mt-3">
+        <p>¿No tienes cuenta? 👉 <a href="{% url 'citas:register' %}">Registrarse</a></p>
+        <p>¿Olvidaste tu contraseña? 👉 <a href="{% url 'password_reset' %}">Recuperar Contraseña</a></p>
+    </div>
 {% endblock %}
