@@ -21,7 +21,7 @@
             {% endif %}
         </div>
         
-        <div class="card shadow bg-light text-center main-title mb-3">
+        <div class="card shadow bg-light text-center m-3 display-5 font-weight-bold">
             <h2>Citas de {{ user.username }}</h2>
         </div>
 
@@ -39,7 +39,7 @@
                             <p class="card-text"><strong>Comentario:</strong> {{ cita.comentario }}</p>
                             <div class="mt-auto d-flex justify-content-between">
                                 <a href="{% url 'citas:editar_cita' cita.id %}" class="btn btn-primary">Editar</a>
-                                <a href="{% url 'citas:eliminar_cita' cita.id %}" class="btn btn-danger">Eliminar</a>
+                                <a href="{% url 'citas:eliminar_cita' cita.id %}" class="btn btn-outline-danger">Eliminar</a>
                             </div>
                         </div>
                     </div>
