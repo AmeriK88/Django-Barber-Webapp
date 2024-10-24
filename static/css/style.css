@@ -6,7 +6,7 @@
     --secondary-color: #FAF9F6; 
     --background-color: #EFEAD8; 
     --header-background: #3B2C29; 
-    --link-color: #FAF9F6; 
+    --link-color: #f0f0f0; 
     --link-hover-background: #8b8069; 
     --form-background: #c4a68a; 
     --border-color: #a3978c; 
@@ -315,11 +315,18 @@ li {
 
 /* Footer */
 footer {
-    background-color: #333;
-    color: var(--secondary-color);
+    background-color: var(--primary-color); 
     text-align: center;
     padding: 1rem;
     flex-shrink: 0;
+}
+
+footer, footer a {
+    color: var(--link-color);
+}
+
+footer a:hover {
+    color: var(--link-hover-background);
 }
 
 /* Sobrescribir colores de Bootstrap */
@@ -350,20 +357,6 @@ footer {
     background-color: var(--link-hover-background);
 }
 
-/* Footer */
-footer {
-    background-color: var(--primary-color); 
-}
-
-footer a {
-    color: var(--link-color); 
-}
-
-footer a:hover {
-    color: var(--link-hover-background); 
-}
-
-
 /* Error Styles */
 .is-invalid {
     border-color: var(--error-color);
@@ -390,7 +383,12 @@ footer a:hover {
 
 .alert {
     border-radius: 0.25rem;
+    padding: 15px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-align: center;
 }
+
 
 .alert-danger {
     background-color: var(--error-background);

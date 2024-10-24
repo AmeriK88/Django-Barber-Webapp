@@ -26,7 +26,7 @@
         </div>
 
         <!-- Sección de Citas Activas -->
-        <h2 class="mt-5">Citas Activas</h2>
+        <h2 class="mt-5 text-center display-5 font-weight-bold">Citas Activas</h2>
         {% if citas_activas %}
             <div class="row g-4">
                 {% for cita in citas_activas %}
@@ -47,11 +47,19 @@
                 {% endfor %}
             </div>
         {% else %}
-            <p class="text-center">No tienes citas activas.</p>
+            <div class="container mt-5">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">No tienes citas activas</h5>
+                        <p class="card-text">No esperes más y reserva tu cita.</p>
+                        <a href="{% url 'citas:reservar_cita' %}" class="btn btn-primary">Reservar cita</a>
+                    </div>
+                </div>
+            </div>
         {% endif %}
 
         <!-- Sección de Historial de Citas -->
-        <h2 class="mt-5">Historial de Citas</h2>
+        <h2 class="mt-5 text-center display-5 font-weight-bold">Historial de Citas</h2>
         {% if citas_pasadas %}
             <div class="row g-4">
                 {% for cita in citas_pasadas %}
@@ -68,7 +76,15 @@
                 {% endfor %}
             </div>
         {% else %}
-            <p class="text-center">No tienes citas pasadas.</p>
+            <div class="container mt-5">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">No tienes citas pasadas</h5>
+                        <p class="card-text">Pero no te preocupes, puedes reservar una cita para disfrutar de nuestros servicios.</p>
+                        <a href="{% url 'citas:reservar_cita' %}" class="btn btn-primary">Reservar cita</a>
+                    </div>
+                </div>
+            </div>
         {% endif %}
     </div>
 {% endblock %}

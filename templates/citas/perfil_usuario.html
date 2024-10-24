@@ -73,7 +73,15 @@
                 {% endif %}
             </div>
             {% else %}
-            <p class="text-center">No tienes citas programadas.</p>
+                <div class="container mt-5">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title">No tienes citas activas</h5>
+                            <p class="card-text">Pero no te preocupes, puedes reservar una cita para disfrutar de nuestros servicios.</p>
+                            <a href="{% url 'citas:reservar_cita' %}" class="btn btn-primary">Reservar cita</a>
+                        </div>
+                    </div>
+                </div>
             {% endif %}
         </div>
 {% endblock %}
