@@ -11,6 +11,7 @@ from django_recaptcha.fields import ReCaptchaField
 
 class CitaForm(forms.ModelForm):
     HORA_CHOICES = [
+        ('', 'Seleccione una hora'),
         ('09:30', '09:30 AM'),
         ('10:30', '10:30 AM'),
         ('11:30', '11:30 AM'),
