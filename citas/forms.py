@@ -45,7 +45,7 @@ class CitaForm(forms.ModelForm):
         hora = self.cleaned_data['hora']
         hora = datetime.strptime(hora, '%H:%M').time()
         if hora < time(9, 30) or hora > time(19, 0):
-            raise forms.ValidationError("La hora seleccionada está fuera del rango permitido.")
+            raise forms.ValidationError("¡Se te fue el baifo! La hora está fuera del rango.")
         return hora
 
     def clean(self):
@@ -56,12 +56,9 @@ class CitaForm(forms.ModelForm):
 
         if fecha and hora:
             fecha_hora = datetime.combine(fecha, hora)
-            if timezone.is_naive(fecha_hora):
-                fecha_hora = timezone.make_aware(fecha_hora, timezone.get_current_timezone())
             if Cita.objects.filter(fecha=fecha_hora).exclude(id=cita_id).exists():
-                raise forms.ValidationError("¡Lo siento viejito! Hora ocupada.")
+                self.add_error('hora', "¡Lo siento viejito! Hora ocupada.")
         return cleaned_data
-
 
 class ResenaForm(forms.ModelForm):
     class Meta:
@@ -85,14 +82,14 @@ class CustomUserCreationForm(UserCreationForm):
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if User.objects.filter(email=email).exists():
-            raise forms.ValidationError("Este correo electrónico ya está registrado puntal.")
+            raise forms.ValidationError("!Chacho¡ Este email ya está registrado puntal.")
         return email
 
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
         password2 = self.cleaned_data.get('password2')
         if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("Las contraseñas no coinciden.")
+            raise forms.ValidationError("¡Estás bonito! Las contraseñas no coinciden.")
         return password2
 
     def save(self, commit=True):

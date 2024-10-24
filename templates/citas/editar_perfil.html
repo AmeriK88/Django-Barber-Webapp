@@ -9,12 +9,6 @@
         <div class="card-body">
             <p class="text-muted mb-4 text-center">Actualiza tu información personal aquí. Todos los campos son opcionales, pero te recomendamos que mantengas tu perfil actualizado.</p>
 
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} text-center">
-                    {{ message }}
-                </div>
-            {% endfor %}
-
             <!-- Información actual del usuario -->
             <div class="card mx-auto mb-5 rounded-3 col-12 col-sm-8 col-md-6 col-lg-4" style="max-width: 100%;">
                 <div class="card-header main-title ">
@@ -25,8 +19,14 @@
                     <p class="card-text"><strong>Correo Electrónico:</strong> {{ current_email }}</p>
                     <p class="card-text"><strong>Teléfono Actual:</strong> {{ current_phone }}</p>
                 </div>
-            </div>                   
+            </div>      
 
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} text-center">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            
             <!-- Formulario de edición -->
             <form method="post" class="needs-validation" novalidate>
                 {% csrf_token %}
