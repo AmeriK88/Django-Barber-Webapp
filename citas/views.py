@@ -1,6 +1,6 @@
 from datetime import datetime
 from django.utils import timezone
-from django.contrib.auth import logout as auth_logout, login as auth_login, update_session_auth_hash
+from django.contrib.auth import logout as auth_logout, login as auth_login, authenticate, update_session_auth_hash
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
