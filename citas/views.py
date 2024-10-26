@@ -55,11 +55,11 @@ def login_view(request):
 @login_required
 @handle_exceptions
 def reservar_cita(request):
-    # Obtener fechas completamente reservadas
-    horas_por_dia = Cita.objects.values('fecha__date').annotate(total_citas=Count('hora')).filter(total_citas=len(CitaForm.HORA_CHOICES) - 1)  # Excluye la opción vacía
+    # Obtener fechas completamente reservadas & excluye la opción vacía
+    horas_por_dia = Cita.objects.values('fecha__date').annotate(total_citas=Count('hora')).filter(total_citas=len(CitaForm.HORA_CHOICES) - 1) 
     fechas_ocupadas = [entry['fecha__date'].isoformat() for entry in horas_por_dia]
     
-    # Construye diccionario de horas ocupadas por fecha
+    # Crea dicct de horas ocupadas por fecha
     horas_ocupadas_por_fecha = {cita.fecha.date().isoformat(): [] for cita in Cita.objects.all()}
     for cita in Cita.objects.all():
         horas_ocupadas_por_fecha[cita.fecha.date().isoformat()].append(cita.fecha.strftime("%H:%M"))
@@ -83,6 +83,7 @@ def reservar_cita(request):
         'horas_ocupadas_por_fecha': horas_ocupadas_por_fecha
     })
 
+# Función ver citas & historial 
 @login_required
 @handle_exceptions
 def ver_citas(request):
@@ -90,6 +91,7 @@ def ver_citas(request):
     citas_pasadas = Cita.objects.filter(usuario=request.user, fecha__lt=timezone.now()) 
     return render(request, 'citas/ver_citas.html', {'citas_activas': citas_activas, 'citas_pasadas': citas_pasadas})
 
+# Editar citas
 @login_required
 @handle_exceptions
 def editar_cita(request, cita_id):
@@ -129,6 +131,7 @@ def editar_cita(request, cita_id):
         'horas_ocupadas_por_fecha': horas_ocupadas_por_fecha,
     })
 
+# Eliminar citas
 @login_required
 @handle_exceptions
 def eliminar_cita(request, cita_id):
@@ -184,6 +187,7 @@ def agregar_resena(request):
         resena = form.save(commit=False)
         resena.usuario = request.user
         resena.save()
+        messages.success(request, f'¡Esa es viejito. Aportando tu granito de arena! ¡Gracias Puntal!')
         return redirect('citas:resenas')
 
     return render(request, 'citas/agregar_resena.html', {'form': form})

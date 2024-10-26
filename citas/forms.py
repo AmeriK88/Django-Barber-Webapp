@@ -8,7 +8,7 @@ from django.utils import timezone
 from .models import UserProfile
 from django_recaptcha.fields import ReCaptchaField
 
-
+# Formulario cita
 class CitaForm(forms.ModelForm):
     HORA_CHOICES = [
         ('', 'Seleccione una hora'),
@@ -30,14 +30,14 @@ class CitaForm(forms.ModelForm):
     ]
 
     hora = forms.ChoiceField(choices=HORA_CHOICES, label='Hora')
-
+    # Campos para el formulario
     class Meta:
         model = Cita
         fields = ['servicio', 'fecha', 'hora', 'comentario']
         widgets = {
             'fecha': forms.DateInput(attrs={'type': 'date'}),
         }
-
+    # Manejo errores formulario
     def clean_fecha(self):
         fecha = self.cleaned_data['fecha']
         if fecha.weekday() >= 5:
@@ -57,7 +57,7 @@ class CitaForm(forms.ModelForm):
 
     def clean_hora(self):
         hora = self.cleaned_data.get('hora')
-        if not hora or hora == '':  # Evitar la opción vacía
+        if not hora or hora == '':  
             raise forms.ValidationError("Por favor, selecciona una hora válida.")
         
         hora = datetime.strptime(hora, '%H:%M').time()
@@ -66,7 +66,7 @@ class CitaForm(forms.ModelForm):
         return hora
 
 
-
+# Formulario reseñas
 class ResenaForm(forms.ModelForm):
     class Meta:
         model = Resena
@@ -77,6 +77,7 @@ class ResenaForm(forms.ModelForm):
             'puntuacion': forms.RadioSelect(attrs={'class': 'rating'})
         }
 
+# Formulario registro usuario
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True, label='Correo electrónico')
     phone = forms.CharField(max_length=15, required=True, label='Teléfono')
@@ -86,6 +87,7 @@ class CustomUserCreationForm(UserCreationForm):
         model = User
         fields = ("username", "email", "phone", "password1", "password2")
 
+    # Majejo errores formulario
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if User.objects.filter(email=email).exists():
