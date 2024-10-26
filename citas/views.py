@@ -187,7 +187,6 @@ def agregar_resena(request):
         resena = form.save(commit=False)
         resena.usuario = request.user
         resena.save()
-        messages.success(request, f'¡Esa es viejito. Aportando tu granito de arena! ¡Gracias Puntal!')
         return redirect('citas:resenas')
 
     return render(request, 'citas/agregar_resena.html', {'form': form})
