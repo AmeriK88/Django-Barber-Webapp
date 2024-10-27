@@ -43,7 +43,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
 ]
 
 ROOT_URLCONF = 'cabigote.urls'
@@ -69,13 +68,6 @@ WSGI_APPLICATION = 'cabigote.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': BASE_DIR / 'db.sqlite3',
-#    }
-#}
 
 DATABASES = {
     'default': {
@@ -120,12 +112,14 @@ USE_L10N = True
 
 USE_TZ = True
 
+
 # Configuraciones relacionadas con la autenticación
 LOGIN_URL = '/accounts/login/'
 
 LOGIN_REDIRECT_URL = '/perfil/'
 
 LOGOUT_REDIRECT_URL = '/'  
+
 
 # Configuración envío email
 EMAIL_BACKEND = env('EMAIL_BACKEND')
@@ -134,6 +128,7 @@ EMAIL_PORT = env('EMAIL_PORT')
 EMAIL_USE_TLS = env('EMAIL_USE_TLS')
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+
 
 # Leer y procesar ADMINS desde el archivo .env
 admins_env = env('ADMINS', default='')
@@ -145,11 +140,7 @@ ADMINS = [tuple(admin.split(',')) for admin in admins_env.split(';')] if admins_
 RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY')
 RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY')
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
-# Config - Static files
+# Config - Static files (CSS, JavaScript, Images)
 
 STATIC_URL = '/static/'
 
