@@ -87,8 +87,9 @@ def reservar_cita(request):
             return redirect('citas:perfil_usuario')
     else:
         form = CitaForm()
-        if not request.user.is_anonymous:
+        if not request.user.is_anonymous and not request.session.get('bienvenido_mostrado', False):
             messages.success(request, f'¡Mi niño¡ ¡Bienvenido {request.user.username}!')
+            request.session['bienvenido_mostrado'] = True
 
     return render(request, 'citas/reservar_cita.html', {
         'form': form,
@@ -192,16 +193,25 @@ def logout_view(request):
 
 @handle_exceptions
 def ver_resenas(request):
+    # Crear una instancia del formulario de reseña
     form = ResenaForm(request.POST or None)
+    
+    # Procesar el formulario si se envía a través de POST y es válido
     if request.method == 'POST' and form.is_valid():
         resena = form.save(commit=False)
         resena.usuario = request.user
         resena.save()
         return redirect('citas:resenas')
     
-    resenas = Resena.objects.all()
+    # Obtener todas las reseñas ordenadas por fecha de creación
+    resenas = Resena.objects.all().order_by('-fecha')
+    
+    # Lista de estrellas para la valoración
     estrellas = list(range(1, 6))
+    
+    # Renderizar la plantilla con el formulario y las reseñas
     return render(request, 'citas/resenas.html', {'form': form, 'resenas': resenas, 'estrellas': estrellas})
+
 
 @login_required
 @handle_exceptions
