@@ -185,42 +185,38 @@ img:hover {
 }
 
 /* Card Styles */
-.card,
-.card-user-profile {
+.card, .card-user-profile {
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     box-shadow: var(--card-shadow);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    transition: transform 0.3s ease; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.card:hover {
-    transform: translateY(-5px); 
+.card:hover, .card-user-profile:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
 }
 
-.card img,
-.card-user-profile img {
+.card img, .card-user-profile img {
     height: 200px;
     object-fit: cover;
     width: 100%;
-    transition: transform 0.3s ease; 
+    transition: transform 0.3s ease;
 }
 
-.card img:hover,
-.card-user-profile img:hover {
-    transform: scale(1.1); 
+.card img:hover, .card-user-profile img:hover {
+    transform: scale(1.1);
 }
 
-.card-body,
-.card-user-profile body {
+.card-body, .card-user-profile .card-body {
     padding: 1.5rem;
     flex: 1;
 }
 
-.card-title,
-.card-text {
+.card-title, .card-text {
     font-size: 1.25rem;
     margin-bottom: 1rem;
 }
@@ -229,6 +225,7 @@ img:hover {
     font-size: 1rem;
     margin-bottom: 0.5rem;
 }
+
 
 /* User Profile Specific */
 .container {
