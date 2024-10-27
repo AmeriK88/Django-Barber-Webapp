@@ -65,14 +65,16 @@ def login_view(request):
 @handle_exceptions
 def reservar_cita(request):
     # Obtener fechas completamente reservadas & excluye la opción vacía
-    horas_por_dia = Cita.objects.values('fecha__date').annotate(total_citas=Count('hora')).filter(total_citas=len(CitaForm.HORA_CHOICES) - 1) 
+    horas_por_dia = Cita.objects.values('fecha__date').annotate(total_citas=Count('hora')).filter(total_citas=len(CitaForm.HORA_CHOICES) - 1)
     fechas_ocupadas = [entry['fecha__date'].isoformat() for entry in horas_por_dia]
-    
-    # Crea dicct de horas ocupadas por fecha
-    horas_ocupadas_por_fecha = {cita.fecha.date().isoformat(): [] for cita in Cita.objects.all()}
-    for cita in Cita.objects.all():
+
+    # Crear un diccionario de horas ocupadas por fecha
+    citas = Cita.objects.all()
+    horas_ocupadas_por_fecha = {cita.fecha.date().isoformat(): [] for cita in citas}
+    for cita in citas:
         horas_ocupadas_por_fecha[cita.fecha.date().isoformat()].append(cita.fecha.strftime("%H:%M"))
-    # Valida formulario y muestra mensaje
+
+    # Validar formulario y mostrar mensaje
     if request.method == 'POST':
         form = CitaForm(request.POST)
         if form.is_valid():
@@ -85,15 +87,15 @@ def reservar_cita(request):
             return redirect('citas:perfil_usuario')
     else:
         form = CitaForm()
-    
-    if not request.user.is_anonymous:
-        messages.success(request, f'¡Mi niño¡ ¡Bienvenido {request.user.username}!')
+        if not request.user.is_anonymous:
+            messages.success(request, f'¡Mi niño¡ ¡Bienvenido {request.user.username}!')
 
     return render(request, 'citas/reservar_cita.html', {
         'form': form,
         'fechas_ocupadas': fechas_ocupadas,
         'horas_ocupadas_por_fecha': horas_ocupadas_por_fecha
     })
+
 
 # Función ver citas & historial 
 @login_required
@@ -138,7 +140,7 @@ def editar_cita(request, cita_id):
                 # Actualiza la fecha y hora de la cita
                 cita.fecha = fecha_hora
                 form.save()
-                 # Envía una notificación via email
+                 # Envíamos notificación via email y mostramos mensaje éxito
                 enviar_notificacion_modificacion_cita(request.user.email, cita)
                 messages.success(request, '¡Eres un puntal! Actualizaste tu cita.')
                 return redirect('citas:ver_citas')
@@ -157,6 +159,7 @@ def editar_cita(request, cita_id):
 def eliminar_cita(request, cita_id):
     cita = get_object_or_404(Cita, id=cita_id, usuario=request.user)
     
+    # Si la cita incluye excepción
     if not cita.puede_cancelar():
         return render(request, 'citas/eliminar_cita.html', {
             'cita': cita,
@@ -172,7 +175,7 @@ def eliminar_cita(request, cita_id):
         }
         
         cita.delete()
-        # Envía una notificación via email
+        # Notificación via email & mensaje en UI
         enviar_notificacion_eliminacion_cita(cita_detalle['email'], cita_detalle)
         messages.success(request, "¡Fuerte loco! Has cancelado tu cita.")
         return redirect('citas:ver_citas')
@@ -203,15 +206,22 @@ def ver_resenas(request):
 @login_required
 @handle_exceptions
 def agregar_resena(request):
+    # Crear formulario de reseña 
     form = ResenaForm(request.POST or None)
+
+    # Verificar si el formulario es válido
     if form.is_valid():
-        resena = form.save(commit=False)
+        # Crear una instancia de reseña sin guardarla en la base de datos aún
+        resena = form.save(commit=False) 
+        # Asignar el usuario actual a la reseña
         resena.usuario = request.user
         resena.save()
         messages.success(request, "¡Viva la virgen del Carmen! ¡Aguita papá la reseña!.")
         return redirect('citas:resenas')
-
+    
+    # Renderizar el formulario de reseña si no se ha enviado ningún dato o si es inválido
     return render(request, 'citas/agregar_resena.html', {'form': form})
+
 
 @handle_exceptions
 def ver_imagenes(request):
@@ -232,28 +242,36 @@ def perfil_usuario(request):
 @login_required
 @handle_exceptions
 def editar_perfil_usuario(request):
+    # Obtener o crear el perfil del usuario
     user_profile, created = UserProfile.objects.get_or_create(user=request.user)
     
     if request.method == 'POST':
+        # Crear instancias de los formularios con los datos enviados a través de POST
         profile_form = UserProfileForm(request.POST, instance=user_profile)
         user_form = UserForm(request.POST, instance=request.user)
         password_form = PasswordChangeForm(user=request.user, data=request.POST)
         
+        # Valida los formularios & guarda los cambios
         if profile_form.is_valid() and user_form.is_valid() and password_form.is_valid():
             user_form.save()
             profile_form.save()
             password_form.save()
-            update_session_auth_hash(request, request.user)  
+            
+            # Actualizar la sesión del usuario con la nueva contraseña & mensaje en UI
+            update_session_auth_hash(request, request.user)
             messages.success(request, '¡Esa es niñote! Tu perfil ha sido actualizado.')
             return redirect('citas:editar_perfil_usuario')
         else:
+            # Mostrar un mensaje de error si la validación falla
             if not password_form.is_valid():
                 messages.error(request, '¡Ños! Tú o el servidor están en la parra. Prueba de nuevo puntal.')
     else:
+        # Crear instancias de los formularios con los datos actuales del usuario
         profile_form = UserProfileForm(instance=user_profile)
         user_form = UserForm(instance=request.user)
         password_form = PasswordChangeForm(user=request.user)
-
+    
+    # Contexto para renderizar la plantilla
     context = {
         'profile_form': profile_form,
         'user_form': user_form,
@@ -262,5 +280,6 @@ def editar_perfil_usuario(request):
         'current_email': request.user.email,
         'current_phone': user_profile.telefono
     }
-
+    
+    # Renderizar la plantilla de edición de perfil
     return render(request, 'citas/editar_perfil.html', context)
