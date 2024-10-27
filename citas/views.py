@@ -85,6 +85,9 @@ def reservar_cita(request):
             return redirect('citas:perfil_usuario')
     else:
         form = CitaForm()
+    
+    if not request.user.is_anonymous:
+        messages.success(request, f'¡Mi niño¡ ¡Bienvenido {request.user.username}!')
 
     return render(request, 'citas/reservar_cita.html', {
         'form': form,

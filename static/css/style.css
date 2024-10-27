@@ -432,8 +432,10 @@ footer a:hover {
 }
 
 @media (max-width: 576px) {
-    .card {
-        padding: 20px;
+
+    .form-check-inline {
+        display: block;
+        margin-bottom: 0.5rem;
     }
 
     .btn-login {
@@ -442,9 +444,6 @@ footer a:hover {
         display: block;
     }
 
-    p {
-        font-size: 1.1rem; 
-    }
 }
 
 
