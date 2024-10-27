@@ -22,13 +22,17 @@ def servicios(request):
     
     return render(request, 'citas/servicios.html', {'servicios': servicios})
 
+# Manejo de excepciones
 @handle_exceptions
 def register(request):
+    # Verifica si solicitud es un POST
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
+        # Si el formulario es válido - se guarda el user y autentica
         if form.is_valid():
             user = form.save()
             auth_login(request, user)
+            # Mensaje de éxito en UI
             messages.success(request, f'¡Échale mojo! Bienvenido a Ca\'Bigote, {user.username}! Cuenta operativa.')
             return redirect('citas:perfil_usuario')
     else:
@@ -36,16 +40,21 @@ def register(request):
 
     return render(request, 'registration/register.html', {'form': form})
 
+# Manejo de excepciones
 @handle_exceptions
 def login_view(request):
+    # Verifica si solicitud es un POST
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
+            # Obtenemos usuario del form e inicio de sesión
             user = form.get_user()
             auth_login(request, user)
+            # Mensaje de éxito en UI
             messages.success(request, f'¡¿Qué pasó loco?! Bienvenido de nuevo, {user.username}!')
             return redirect('citas:perfil_usuario')
         else:
+            # Mensaje de error en UI
             messages.error(request, '¡Eres un tolete! Nombre de usuario o contraseña incorrectos.')
     else:
         form = AuthenticationForm()
@@ -63,7 +72,7 @@ def reservar_cita(request):
     horas_ocupadas_por_fecha = {cita.fecha.date().isoformat(): [] for cita in Cita.objects.all()}
     for cita in Cita.objects.all():
         horas_ocupadas_por_fecha[cita.fecha.date().isoformat()].append(cita.fecha.strftime("%H:%M"))
-
+    # Valida formulario y muestra mensaje
     if request.method == 'POST':
         form = CitaForm(request.POST)
         if form.is_valid():
@@ -72,7 +81,7 @@ def reservar_cita(request):
             cita.fecha = timezone.make_aware(datetime.combine(form.cleaned_data['fecha'], form.cleaned_data['hora']))
             cita.save()
             enviar_confirmacion_cita(request.user.email, cita)
-            messages.success(request, '¡Viejito! Ya tienes tu cita.')
+            messages.success(request, '¡Viejito! Ya tienes tu cita confirmada.')
             return redirect('citas:perfil_usuario')
     else:
         form = CitaForm()
@@ -91,34 +100,42 @@ def ver_citas(request):
     citas_pasadas = Cita.objects.filter(usuario=request.user, fecha__lt=timezone.now()) 
     return render(request, 'citas/ver_citas.html', {'citas_activas': citas_activas, 'citas_pasadas': citas_pasadas})
 
-# Editar citas
+# Editar citas según disponibilidad & manejo excepciones
 @login_required
 @handle_exceptions
 def editar_cita(request, cita_id):
     cita = get_object_or_404(Cita, id=cita_id, usuario=request.user)
-    
+    # Verifica si la fecha ya ha pasado
     if cita.fecha < timezone.now():
         messages.error(request, '¡Ñooosss! ¡Se te fue el baifo! La fecha ya pasó.')
         return redirect('citas:ver_citas')
     
+     # Obtiene las fechas ocupadas en las que todas las horas están reservadas
     horas_por_dia = Cita.objects.values('fecha__date').annotate(total_citas=Count('hora')).filter(total_citas=len(CitaForm.HORA_CHOICES))
     fechas_ocupadas = [entry['fecha__date'].isoformat() for entry in horas_por_dia]
+
+    # Crea un diccionario para almacenar las horas ocupadas
     horas_ocupadas_por_fecha = {cita_existente.fecha.date().isoformat(): [] for cita_existente in Cita.objects.all()}
     for cita_existente in Cita.objects.all():
         horas_ocupadas_por_fecha[cita_existente.fecha.date().isoformat()].append(cita_existente.fecha.strftime("%H:%M"))
 
+    # Verifica si el método de la petición es POST
     if request.method == 'POST':
         form = CitaForm(request.POST, instance=cita)
         if form.is_valid():
             fecha = form.cleaned_data['fecha']
             hora = form.cleaned_data['hora']
+            # Convierte  fecha y hora a aware si es necesario
             fecha_hora = timezone.make_aware(datetime.combine(fecha, hora)) if timezone.is_naive(datetime.combine(fecha, hora)) else datetime.combine(fecha, hora)
 
+            # Verifica existencia de cita en la fecha y hora seleccionada excluyendo la editada
             if Cita.objects.filter(fecha=fecha_hora).exclude(id=cita_id).exists():
                 form.add_error(None, "Ya existe una cita reservada en esa fecha y hora.")
             else:
+                # Actualiza la fecha y hora de la cita
                 cita.fecha = fecha_hora
                 form.save()
+                 # Envía una notificación via email
                 enviar_notificacion_modificacion_cita(request.user.email, cita)
                 messages.success(request, '¡Eres un puntal! Actualizaste tu cita.')
                 return redirect('citas:ver_citas')
@@ -131,7 +148,7 @@ def editar_cita(request, cita_id):
         'horas_ocupadas_por_fecha': horas_ocupadas_por_fecha,
     })
 
-# Eliminar citas
+# Función para eliminar cita
 @login_required
 @handle_exceptions
 def eliminar_cita(request, cita_id):
@@ -152,6 +169,7 @@ def eliminar_cita(request, cita_id):
         }
         
         cita.delete()
+        # Envía una notificación via email
         enviar_notificacion_eliminacion_cita(cita_detalle['email'], cita_detalle)
         messages.success(request, "¡Fuerte loco! Has cancelado tu cita.")
         return redirect('citas:ver_citas')
@@ -187,6 +205,7 @@ def agregar_resena(request):
         resena = form.save(commit=False)
         resena.usuario = request.user
         resena.save()
+        messages.success(request, "¡Viva la virgen del Carmen! ¡Aguita papá la reseña!.")
         return redirect('citas:resenas')
 
     return render(request, 'citas/agregar_resena.html', {'form': form})
