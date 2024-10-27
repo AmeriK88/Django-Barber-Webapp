@@ -4,87 +4,71 @@
 
 {% block content %}
     <div class="container mt-5 mb-5">
-        <div class="container mt-3">
-            <!-- Mostrar mensajes de éxito o error -->
-            {% if messages %}
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-md-12"> 
-                            {% for message in messages %}
-                                <div class="alert {% if message.tags == 'error' %}alert-error{% else %}alert-success{% endif %} alert-dismissible fade show text-center" role="alert">
-                                    {{ message }}
+        <div class="container mt-3"> 
+            <div class="card shadow bg-light text-center m-3 display-5 font-weight-bold">
+                <h2>Citas de {{ user.username }}</h2>
+            </div>
+
+            <!-- Sección de Citas Activas -->
+            <h2 class="mt-5 text-center display-5 font-weight-bold">Citas Activas</h2>
+            {% if citas_activas %}
+                <div class="row g-4">
+                    {% for cita in citas_activas %}
+                    <div class="col-12 {% if citas_activas|length > 1 %}col-md-6 col-lg-4{% endif %} mt-5">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">{{ cita.servicio.nombre }}</h5>
+                                <p class="card-text"><strong>Fecha:</strong> {{ cita.fecha }}</p>
+                                <p class="card-text"><strong>Hora:</strong> {{ cita.hora }}</p>
+                                <p class="card-text"><strong>Comentario:</strong> {{ cita.comentario }}</p>
+                                <div class="mt-auto d-flex justify-content-between">
+                                    <a href="{% url 'citas:editar_cita' cita.id %}" class="btn btn-primary">Editar</a>
+                                    <a href="{% url 'citas:eliminar_cita' cita.id %}" class="btn btn-outline-danger">Eliminar</a>
                                 </div>
-                            {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="container mt-5">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title">No tienes citas activas</h5>
+                            <p class="card-text">No esperes más y reserva tu cita.</p>
+                            <a href="{% url 'citas:reservar_cita' %}" class="btn btn-primary">Reservar cita</a>
                         </div>
                     </div>
                 </div>
             {% endif %}
-        </div>
-        
-        <div class="card shadow bg-light text-center m-3 display-5 font-weight-bold">
-            <h2>Citas de {{ user.username }}</h2>
-        </div>
 
-        <!-- Sección de Citas Activas -->
-        <h2 class="mt-5 text-center display-5 font-weight-bold">Citas Activas</h2>
-        {% if citas_activas %}
-            <div class="row g-4">
-                {% for cita in citas_activas %}
-                <div class="col-12 {% if citas_activas|length > 1 %}col-md-6 col-lg-4{% endif %} mt-5">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">{{ cita.servicio.nombre }}</h5>
-                            <p class="card-text"><strong>Fecha:</strong> {{ cita.fecha }}</p>
-                            <p class="card-text"><strong>Hora:</strong> {{ cita.hora }}</p>
-                            <p class="card-text"><strong>Comentario:</strong> {{ cita.comentario }}</p>
-                            <div class="mt-auto d-flex justify-content-between">
-                                <a href="{% url 'citas:editar_cita' cita.id %}" class="btn btn-primary">Editar</a>
-                                <a href="{% url 'citas:eliminar_cita' cita.id %}" class="btn btn-outline-danger">Eliminar</a>
+            <!-- Sección de Historial de Citas -->
+            <h2 class="mt-5 text-center display-5 font-weight-bold">Historial de Citas</h2>
+            {% if citas_pasadas %}
+                <div class="row g-4">
+                    {% for cita in citas_pasadas %}
+                    <div class="col-12 col-md-6 col-lg-4 mt-5">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">{{ cita.servicio.nombre }}</h5>
+                                <p class="card-text"><strong>Fecha:</strong> {{ cita.fecha }}</p>
+                                <p class="card-text"><strong>Hora:</strong> {{ cita.hora }}</p>
+                                <p class="card-text"><strong>Comentario:</strong> {{ cita.comentario }}</p>
                             </div>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
-            </div>
-        {% else %}
-            <div class="container mt-5">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">No tienes citas activas</h5>
-                        <p class="card-text">No esperes más y reserva tu cita.</p>
-                        <a href="{% url 'citas:reservar_cita' %}" class="btn btn-primary">Reservar cita</a>
-                    </div>
-                </div>
-            </div>
-        {% endif %}
-
-        <!-- Sección de Historial de Citas -->
-        <h2 class="mt-5 text-center display-5 font-weight-bold">Historial de Citas</h2>
-        {% if citas_pasadas %}
-            <div class="row g-4">
-                {% for cita in citas_pasadas %}
-                <div class="col-12 col-md-6 col-lg-4 mt-5">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">{{ cita.servicio.nombre }}</h5>
-                            <p class="card-text"><strong>Fecha:</strong> {{ cita.fecha }}</p>
-                            <p class="card-text"><strong>Hora:</strong> {{ cita.hora }}</p>
-                            <p class="card-text"><strong>Comentario:</strong> {{ cita.comentario }}</p>
+            {% else %}
+                <div class="container mt-5">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title">No tienes citas pasadas</h5>
+                            <p class="card-text">Pero no te preocupes, puedes ver nuestros servicios.</p>
+                            <a href="{% url 'citas:servicios' %}" class="btn btn-primary">Ver servicios</a>
                         </div>
                     </div>
                 </div>
-                {% endfor %}
-            </div>
-        {% else %}
-            <div class="container mt-5">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">No tienes citas pasadas</h5>
-                        <p class="card-text">Pero no te preocupes, puedes ver nuestros servicios.</p>
-                        <a href="{% url 'citas:servicios' %}" class="btn btn-primary">Ver servicios</a>
-                    </div>
-                </div>
-            </div>
-        {% endif %}
+            {% endif %}
     </div>
 {% endblock %}

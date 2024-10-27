@@ -20,12 +20,6 @@
                     <p class="card-text"><strong>Teléfono Actual:</strong> {{ current_phone }}</p>
                 </div>
             </div>      
-
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} text-center">
-                    {{ message }}
-                </div>
-            {% endfor %}
             
             <!-- Formulario de edición -->
             <form method="post" class="needs-validation" novalidate>

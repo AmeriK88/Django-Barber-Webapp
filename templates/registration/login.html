@@ -7,21 +7,6 @@
         <h2>Login</h2>
     </div>
 
-    <!-- Mensaje -->
-    {% if messages %}
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6"> 
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} text-center">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    {% endif %}
-
     <form method="post">
         {% csrf_token %}
         
@@ -54,8 +39,17 @@
         <button type="submit" class="btn btn-primary">Login</button>
     </form>
 
-    <div class="card bg-white text-center mt-3">
-        <p>¿No tienes cuenta? 👉 <a href="{% url 'citas:register' %}">Registrarse</a></p>
-        <p>¿Olvidaste tu contraseña? 👉 <a href="{% url 'password_reset' %}">Recuperar Contraseña</a></p>
+    <div class="card bg-light border-0 text-center mt-4 p-4 shadow-sm">
+        <p class="mb-2">¿No tienes cuenta? 
+            <a href="{% url 'citas:register' %}" class="btn btn-link p-0 text-decoration-none fw-bold" aria-label="Ir a registrarse">
+                <i class="fas fa-user-plus"></i> Registrarse
+            </a>
+        </p>
+        <p class="mb-0">¿Olvidaste tu contraseña? 
+            <a href="{% url 'password_reset' %}" class="btn btn-link p-0 text-decoration-none fw-bold" aria-label="Recuperar contraseña">
+                <i class="fas fa-key"></i> Recuperar Contraseña
+            </a>
+        </p>
     </div>
+    
 {% endblock %}

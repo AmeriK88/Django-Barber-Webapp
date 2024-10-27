@@ -3,21 +3,6 @@
 {% block title %}Perfil de Usuario{% endblock %}
 
 {% block content %}
-    <!-- Mensaje -->
-    {% if messages %}
-    <div class="container mt-3">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} text-center">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    {% endif %}
-
 
     <div class="container mt-3 d-flex">
         <a href="{% url 'citas:editar_perfil_usuario' %}" class="btn btn-primary btn-sm ml-2 mt-3">Editar Perfil</a>
