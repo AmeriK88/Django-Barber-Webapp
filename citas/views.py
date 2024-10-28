@@ -80,6 +80,7 @@ def reservar_cita(request):
         if form.is_valid():
             cita = form.save(commit=False)
             cita.usuario = request.user
+            # Añade información sobre la zona horaria actual del sistema
             cita.fecha = timezone.make_aware(datetime.combine(form.cleaned_data['fecha'], form.cleaned_data['hora']))
             cita.save()
             enviar_confirmacion_cita(request.user.email, cita)
@@ -211,27 +212,6 @@ def ver_resenas(request):
     
     # Renderizar la plantilla con el formulario y las reseñas
     return render(request, 'citas/resenas.html', {'form': form, 'resenas': resenas, 'estrellas': estrellas})
-
-
-@login_required
-@handle_exceptions
-def agregar_resena(request):
-    # Crear formulario de reseña 
-    form = ResenaForm(request.POST or None)
-
-    # Verificar si el formulario es válido
-    if form.is_valid():
-        # Crear una instancia de reseña sin guardarla en la base de datos aún
-        resena = form.save(commit=False) 
-        # Asignar el usuario actual a la reseña
-        resena.usuario = request.user
-        resena.save()
-        messages.success(request, "¡Viva la virgen del Carmen! ¡Aguita papá la reseña!.")
-        return redirect('citas:resenas')
-    
-    # Renderizar el formulario de reseña si no se ha enviado ningún dato o si es inválido
-    return render(request, 'citas/agregar_resena.html', {'form': form})
-
 
 @handle_exceptions
 def ver_imagenes(request):
