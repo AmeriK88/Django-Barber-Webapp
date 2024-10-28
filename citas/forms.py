@@ -49,19 +49,12 @@ class CitaForm(forms.ModelForm):
         return fecha
 
     def clean_hora(self):
-        hora = self.cleaned_data['hora']
-        hora = datetime.strptime(hora, '%H:%M').time()
-        if hora < time(9, 30) or hora > time(19, 30):
-            raise forms.ValidationError("¡Se te fue el baifo! La hora está fuera del rango.")
-        return hora
-
-    def clean_hora(self):
         hora = self.cleaned_data.get('hora')
-        if not hora or hora == '':  
+        if not hora or hora == '':
             raise forms.ValidationError("Por favor, selecciona una hora válida.")
         
         hora = datetime.strptime(hora, '%H:%M').time()
-        if hora < time(9, 30) or hora > time(19, 0):
+        if hora < time(9, 30) or hora > time(19, 30):
             raise forms.ValidationError("¡Se te fue el baifo! La hora está fuera del rango.")
         return hora
 
