@@ -194,6 +194,9 @@ def logout_view(request):
 
 @handle_exceptions
 def ver_resenas(request):
+    # Obtener todas las reseñas ordenadas por fecha de creación
+    resenas = Resena.objects.all().order_by('-fecha')
+    
     # Crear una instancia del formulario de reseña
     form = ResenaForm(request.POST or None)
     
@@ -203,9 +206,6 @@ def ver_resenas(request):
         resena.usuario = request.user
         resena.save()
         return redirect('citas:resenas')
-    
-    # Obtener todas las reseñas ordenadas por fecha de creación
-    resenas = Resena.objects.all().order_by('-fecha')
     
     # Lista de estrellas para la valoración
     estrellas = list(range(1, 6))

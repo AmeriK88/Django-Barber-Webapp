@@ -3,9 +3,12 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-    <div class="card bg-white text-center mb-5 mt-5">
-        <h2>Login</h2>
+    <div class="card shadow-sm bg-white text-center p-4 border-0">
+        <h2 class="h4 fw-bold text-secondary mb-0">
+            <i class="fas fa-sign-in-alt me-2 text-primary"></i> Iniciar Sesión
+        </h2>
     </div>
+
 
     <form method="post">
         {% csrf_token %}

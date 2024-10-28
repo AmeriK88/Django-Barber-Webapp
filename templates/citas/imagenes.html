@@ -4,9 +4,12 @@
 
 {% block content %}
 <div class="container mt-5">
-    <div class="card shadow bg-light text-center mb-5 mt-5">
-        <h1>Productos</h1>
+    <div class="mb-5 card shadow-sm bg-light text-center p-4 border-0">
+        <h2 class="h4 fw-bold text-primary mb-0">
+            <i class="fas fa-box-open me-2 text-success"></i> Nuestros Productos
+        </h2>
     </div>
+    
     <div class="row">
         {% for imagen in imagenes %}
         <div class="col-md-4 mb-5 card-img-top">

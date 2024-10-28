@@ -4,9 +4,12 @@
 
 {% block content %}
 <div class="container mb-5 mt-5">
-    <div class="card shadow bg-light text-center mb-3">
-        <h1>Servicios</h1>
-    </div>
+    <div class="card shadow-sm bg-light text-center p-3 border-0">
+        <h2 class="h4 fw-bold text-secondary mb-0">
+            <i class="fas fa-cut me-2 text-primary"></i> Servicios
+        </h2>
+    </div>    
+
     <div class="row  g-4">
         {% for servicio in servicios %}
         <div class="col-md-4 mt-5 card-img-top">
